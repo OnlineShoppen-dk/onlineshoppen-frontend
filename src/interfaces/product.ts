@@ -1,4 +1,4 @@
 export interface Product {
-    Name: string,
-    Price: number
+    name: string,
+    price: number
 }

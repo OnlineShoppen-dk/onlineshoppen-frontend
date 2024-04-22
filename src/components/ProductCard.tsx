@@ -16,12 +16,12 @@ interface Props {
 const ProductCard = ({ product }: Props) => {
   return (
     <Card>
-      <CardHeader fontSize={24}>{product.Name}</CardHeader>
+      <CardHeader fontSize={24}>{product.name}</CardHeader>
       <CardBody>
         <Image src={image} />
       </CardBody>
       <CardFooter>
-        <Text>{product.Price},-</Text>
+        <Text>{product.price},-</Text>
       </CardFooter>
     </Card>
   );
