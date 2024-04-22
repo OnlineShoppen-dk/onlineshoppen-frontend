@@ -1,27 +1,17 @@
 import { Grid } from "@chakra-ui/react";
 import ProductCard from "./ProductCard";
-import image from "../assets/toaster-image.jpg";
-import { Product } from "../interfaces/product";
+import useProducts from "../hooks/useProducts";
 
 const ProductGrid = () => {
-  const product: Product = {
-    Name: "Test",
-    ImageUrl: image,
-    Price: 199,
-  };
+  const { data: products, error, isLoading } = useProducts();
 
-  function GetProducts(): Product[] {
-    const products: Product[] = [];
-    for (let index = 0; index < 20; index++) {
-      products.push(product);
-    }
+  if (isLoading) return <p>Loading products...</p>;
 
-    return products;
-  }
+  if (error) return <p>{error.message}</p>;
 
   return (
     <Grid templateColumns="repeat(4, 1fr)" gap={5}>
-      {GetProducts().map((product) => (
+      {products?.map((product) => (
         <ProductCard product={product} />
       ))}
     </Grid>
