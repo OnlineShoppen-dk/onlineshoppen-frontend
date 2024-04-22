@@ -6,13 +6,7 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
-
-export interface Product {
-  ProductName: string;
-  ImageUrl: string;
-  Price: number;
-}
+import { Product } from "../interfaces/product";
 
 interface Props {
   product: Product;
@@ -21,7 +15,7 @@ interface Props {
 const ProductCard = ({ product }: Props) => {
   return (
     <Card>
-      <CardHeader fontSize={24}>{product.ProductName}</CardHeader>
+      <CardHeader fontSize={24}>{product.Name}</CardHeader>
       <CardBody>
         <Image src={product.ImageUrl} />
       </CardBody>

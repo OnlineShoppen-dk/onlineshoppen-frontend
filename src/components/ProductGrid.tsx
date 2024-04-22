@@ -1,10 +1,11 @@
 import { Grid } from "@chakra-ui/react";
-import ProductCard, { Product } from "./ProductCard";
+import ProductCard from "./ProductCard";
 import image from "../assets/toaster-image.jpg";
+import { Product } from "../interfaces/product";
 
 const ProductGrid = () => {
   const product: Product = {
-    ProductName: "Test",
+    Name: "Test",
     ImageUrl: image,
     Price: 199,
   };
