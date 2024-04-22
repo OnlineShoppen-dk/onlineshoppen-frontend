@@ -1,10 +1,15 @@
 import { Product } from "../interfaces/product";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-const useProducts = () => {
+interface ProductQuery {
+    page: number,
+    pageSize: number
+}
+
+const useProducts = (productQuery: ProductQuery) => {
     const product: Product = {
-        Name: "Test",
-        Price: 199,
+        name: "Test",
+        price: 199,
       };
     
       function GetProducts(): Product[] {
@@ -12,11 +17,13 @@ const useProducts = () => {
         for (let index = 0; index < 20; index++) {
           products.push(product);
         }
-    
-        return products;
+        
+        const pageStartIndex = (productQuery.page - 1) * productQuery.pageSize;
+        const pageEndIndex = (productQuery.page - 1) * productQuery.pageSize + productQuery.pageSize;
+        return products.slice(pageStartIndex, pageEndIndex);
       }
     
-    return useQuery<Product[], Error>({queryKey: ["products"], queryFn: GetProducts})
+    return useQuery<Product[], Error>({queryKey: ["products", productQuery], queryFn: GetProducts, placeholderData: keepPreviousData})
 }
 
 export default useProducts
