@@ -1,11 +1,20 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import ProductGrid from "./components/ProductGrid";
+import SearchInput from "./components/SearchInput";
+import { ProductQuery } from "./hooks/useProducts";
+import { useState } from "react";
 
 function App() {
+  const [productQuery, setProductQuery] = useState<ProductQuery>({} as ProductQuery);
+
   return (
     <>
       <Grid
         templateAreas={`"header header"
+        "header header"
+                  "nav main"
+                  "nav main"
+                  "nav main"
                   "nav main"
                   "nav footer"`}
         gridTemplateRows={"50px 1fr 30px"}
@@ -15,14 +24,14 @@ function App() {
         color="blackAlpha.700"
         fontWeight="bold"
       >
-        <GridItem pl="2" bg="orange.300" area={"header"}>
-          Header
+        <GridItem pl="2" bg="" area={"header"}>
+          <SearchInput onSearch={(searchText) => setProductQuery({...productQuery, searchText})}/>
         </GridItem>
         <GridItem pl="2" bg="pink.300" area={"nav"}>
           Nav
         </GridItem>
         <GridItem pl="2" area={"main"}>
-          <ProductGrid />
+          <ProductGrid productQuery={productQuery}/>
         </GridItem>
         <GridItem pl="2" bg="blue.300" area={"footer"}>
           Footer
