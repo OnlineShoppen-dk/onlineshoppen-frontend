@@ -1,18 +1,10 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import ProductGrid from "./components/ProductGrid";
 import SearchInput from "./components/SearchInput";
-import { ProductQuery } from "./hooks/useProducts";
-import { useState } from "react";
-import { Link } from "react-router-dom";
 
 function App() {
-  const [productQuery, setProductQuery] = useState<ProductQuery>(
-    {} as ProductQuery
-  );
-
   return (
     <>
-      <Link to={"test"}>Test</Link>
       <Grid
         templateAreas={`"header header"
         "header header"
@@ -29,17 +21,13 @@ function App() {
         fontWeight="bold"
       >
         <GridItem pl="2" bg="" area={"header"}>
-          <SearchInput
-            onSearch={(searchText) =>
-              setProductQuery({ ...productQuery, searchText })
-            }
-          />
+          <SearchInput />
         </GridItem>
         <GridItem pl="2" bg="pink.300" area={"nav"}>
           Nav
         </GridItem>
         <GridItem pl="2" area={"main"}>
-          <ProductGrid productQuery={productQuery} />
+          <ProductGrid />
         </GridItem>
         <GridItem pl="2" bg="blue.300" area={"footer"}>
           Footer

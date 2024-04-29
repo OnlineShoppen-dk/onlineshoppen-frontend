@@ -1,20 +1,16 @@
 import { Button, Grid, HStack } from "@chakra-ui/react";
 import ProductCard from "./ProductCard";
-import useProducts, { ProductQuery } from "../hooks/useProducts";
-import { useState } from "react";
+import useProducts from "../hooks/useProducts";
+import useProductQueryStore from "../store";
 
-interface Props {
-  productQuery: ProductQuery
-}
-const ProductGrid = ({productQuery} : Props) => {
-  const [page, setPage] = useState(1);
+const ProductGrid = () => {
+  const { productQuery, setPage } = useProductQueryStore();
+
   const pageSize = 12;
-  const {
-    data: products,
-    error,
-    isLoading,
-    isPlaceholderData,
-  } = useProducts({...productQuery, page, pageSize});
+  productQuery.pageSize = pageSize;
+  productQuery.page = 1;
+
+  const { data: products, error, isLoading, isPlaceholderData } = useProducts();
 
   const hasNextPage = products?.length == pageSize;
 
@@ -32,10 +28,10 @@ const ProductGrid = ({productQuery} : Props) => {
       <HStack marginY={2}>
         <Button
           onClick={() => {
-            setPage(page - 1);
+            setPage(productQuery.page - 1);
             window.scrollTo(0, 0);
           }}
-          isDisabled={page === 1}
+          isDisabled={productQuery.page === 1}
           className="btn btn-primary mt-3"
         >
           Previous
@@ -43,7 +39,7 @@ const ProductGrid = ({productQuery} : Props) => {
         <Button
           onClick={() => {
             if (!isPlaceholderData && hasNextPage) {
-              setPage(page + 1);
+              setPage(productQuery.page + 1);
               window.scrollTo(0, 0);
             }
           }}
