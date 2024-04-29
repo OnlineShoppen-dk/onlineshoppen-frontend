@@ -1,9 +1,12 @@
 import { Button, Grid, HStack } from "@chakra-ui/react";
 import ProductCard from "./ProductCard";
-import useProducts from "../hooks/useProducts";
+import useProducts, { ProductQuery } from "../hooks/useProducts";
 import { useState } from "react";
 
-const ProductGrid = () => {
+interface Props {
+  productQuery: ProductQuery
+}
+const ProductGrid = ({productQuery} : Props) => {
   const [page, setPage] = useState(1);
   const pageSize = 12;
   const {
@@ -11,7 +14,7 @@ const ProductGrid = () => {
     error,
     isLoading,
     isPlaceholderData,
-  } = useProducts({ page, pageSize });
+  } = useProducts({...productQuery, page, pageSize});
 
   const hasNextPage = products?.length == pageSize;
 

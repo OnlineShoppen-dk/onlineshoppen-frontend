@@ -1,9 +1,10 @@
 import { Product } from "../interfaces/product";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-interface ProductQuery {
+export interface ProductQuery {
     page: number,
     pageSize: number
+    searchText: string
 }
 
 const useProducts = (productQuery: ProductQuery) => {
@@ -11,11 +12,19 @@ const useProducts = (productQuery: ProductQuery) => {
         name: "Test",
         price: 199,
       };
+
     
       function GetProducts(): Product[] {
-        const products: Product[] = [];
+        let products: Product[] = [];
         for (let index = 0; index < 20; index++) {
-          products.push(product);
+          product.name += "a";
+          const newProduct : Product = {price: 199, name: product.name};
+          products.push(newProduct);
+        }
+        
+        
+        if (productQuery.searchText) {
+         products = products.filter(p => p.name.toLowerCase().includes(productQuery.searchText.toLowerCase())); 
         }
         
         const pageStartIndex = (productQuery.page - 1) * productQuery.pageSize;
