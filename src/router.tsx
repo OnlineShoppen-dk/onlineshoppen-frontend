@@ -1,14 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
-import App from "./App";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProductGrid from "./components/ProductGrid";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      { path: "", element: <App /> },
+      { path: "", element: <ProductGrid /> },
 
       // ProtectedRoutes
       {
