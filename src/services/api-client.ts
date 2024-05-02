@@ -1,21 +1,20 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-const axiosInstance = axios.create({
-    // TODO: insert api url
-    baseURL: ""
-  });
-  
-  class ApiClient<T> {
-    endpoint: string;
-  
-    constructor(endpoint: string) {
-      this.endpoint = endpoint;
-    }
-  
-    getAll = (config?: AxiosRequestConfig) =>
-      axiosInstance
-        .get<T[]>(this.endpoint, config)
-        .then((res) => res.data);
+class ApiClient<T> {
+  endpoint: string;
+  axiosInstance: AxiosInstance;
+
+  constructor(baseUrl: string, endpoint: string) {
+    this.endpoint = endpoint;
+    this.axiosInstance = axios.create({
+      baseURL: baseUrl
+    });
   }
-  
-  export default ApiClient;
+
+  getAll = (config?: AxiosRequestConfig) =>
+    this.axiosInstance
+      .get<T[]>(this.endpoint, config)
+      .then((res) => res.data);
+}
+
+export default ApiClient;
