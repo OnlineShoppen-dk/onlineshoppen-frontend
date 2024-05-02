@@ -6,13 +6,9 @@ import useProductQueryStore from "../store";
 const ProductGrid = () => {
   const { productQuery, setPage } = useProductQueryStore();
 
-  const pageSize = 12;
-  productQuery.pageSize = pageSize;
-  productQuery.page = 1;
-
   const { data: products, error, isLoading, isPlaceholderData } = useProducts();
 
-  const hasNextPage = products?.length == pageSize;
+  const hasNextPage = products?.length == productQuery.pageSize;
 
   if (isLoading) return <p>Loading products...</p>;
 
