@@ -1,30 +1,67 @@
-// import { useQueryClient } from '@tanstack/react-query';
-import { useApiClient } from './useApiClient';
+import { useMutation } from "@tanstack/react-query";
+import { useApiClient } from "./useApiClient";
 
-type RegisterResponse = {
-    email: string;
-    password: string;
-    guid: string;
+interface RegisterRequest {
+  email: string;
+  password: string;
+  guid: string;
+}
+
+interface RegisterResponse {
+  data: {
+    msg: string;
+    user_details: {
+      email: string;
+      guid: string;
+    };
+  };
+}
+
+interface ProfileRequest {
+  firstName: string;
+  lastName: string;
+  guid: string;
+  email: string;
+  phoneNumber: string;
+}
+
+const useRegister = () => {
+  const { authServiceApiClient } = useApiClient();
+  const { mainServiceApiClient } = useApiClient();
+
+
+  const registerUser = useMutation<RegisterResponse, Error, RegisterRequest>({
+    mutationFn: async (registerData: RegisterRequest) =>
+      await authServiceApiClient.getAxiosInstance.post(
+        "/api/auth/register",
+        registerData
+      ),
+    onSuccess: (response) => {
+      console.log(response.data.user_details);
+    },
+    onError: (error: Error) => {
+      console.error("Registration error:", error);
+    },
+  });
+
+  const registerUserDetails = useMutation<ProfileRequest, Error, ProfileRequest>({
+    mutationFn: async (userDetails: ProfileRequest) =>
+      await mainServiceApiClient.getAxiosInstance.post(
+        "/api/user/register",
+        userDetails
+      ),
+    onSuccess: () => {
+      console.log("Profile updated successfully");
+    },
+    onError: (error: Error) => {
+      console.error("Profile update error:", error);
+    },
+  });
+
+  return { registerUser, registerUserDetails };
+
+
+
 };
 
-export const useRegister = () => {
-  const { authServiceApiClient } = useApiClient('/api/auth/register');
-
-  const register = async (email: string, password: string, guid: string) => {
-    try {
-      const response = await authServiceApiClient.axiosInstance.post<RegisterResponse>('/api/auth/register', {
-        email,
-        password,
-        guid
-      });
-      
-      return response.data;
-    } catch (error) {
-      throw new Error('Failed to register');
-    }
-  };
-
-  return {
-    register,
-  };
-};
+export default useRegister;

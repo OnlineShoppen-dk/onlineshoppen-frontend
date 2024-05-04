@@ -1,18 +1,32 @@
-import { useRegister } from '../hooks/useRegister';
-import { useState } from 'react';
-import {v4} from 'uuid';
+import useRegister from "../hooks/useRegister";
+import { useState } from "react";
+import { v4 } from "uuid";
 
 const Register = () => {
- const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const { register } = useRegister(); 
-const guid = v4()
-
+  const { registerUser,registerUserDetails } = useRegister();
+  const [profile, setProfile] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+  });
+  const guid = v4();
+  const { email, password, firstName, lastName, phoneNumber } = profile;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await register(email, password, guid)
-};
+    registerUser.mutateAsync({ email, password, guid });
+    registerUserDetails.mutateAsync({  firstName, lastName, guid, email, phoneNumber });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      [name]: value,
+    }));
+  };
 
   return (
     <div>
@@ -22,21 +36,53 @@ const guid = v4()
           <label>Email:</label>
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={profile.email}
+            onChange={handleChange}
             required
           />
         </div>
+        <div>
           <label>Password:</label>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={profile.password}
+            onChange={handleChange}
             required
           />
-
-        <button    type="submit">Register</button>
-
+        </div>
+        <div>
+          <label>First Name:</label>
+          <input
+            type="text"
+            name="firstName"
+            value={profile.firstName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Last Name:</label>
+          <input
+            type="text"
+            name="lastName"
+            value={profile.lastName}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Phone Number:</label>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={profile.phoneNumber}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit">Register</button>
       </form>
     </div>
   );

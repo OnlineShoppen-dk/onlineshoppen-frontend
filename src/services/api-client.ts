@@ -1,20 +1,18 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance } from "axios";
 
 class ApiClient<T> {
-  endpoint: string;
-  axiosInstance: AxiosInstance;
+  private axiosInstance: AxiosInstance;
 
-  constructor(baseUrl: string, endpoint: string) {
-    this.endpoint = endpoint;
+  constructor(baseUrl: string) {
     this.axiosInstance = axios.create({
       baseURL: baseUrl
     });
   }
 
-  getAll = (config?: AxiosRequestConfig) =>
-    this.axiosInstance
-      .get<T[]>(this.endpoint, config)
-      .then((res) => res.data);
+  public get getAxiosInstance() {
+    return this.axiosInstance;
+  }
+
 }
 
 export default ApiClient;
