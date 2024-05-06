@@ -47,11 +47,11 @@ const useRegister = () => {
   const registerUserDetails = useMutation<ProfileRequest, Error, ProfileRequest>({
     mutationFn: async (userDetails: ProfileRequest) =>
       await mainServiceApiClient.getAxiosInstance.post(
-        "/api/user/register",
+        "/api/user/User/register",
         userDetails
       ),
-    onSuccess: () => {
-      console.log("Profile updated successfully");
+    onSuccess: (data) => {
+      console.log("User Details created successfully",data);
     },
     onError: (error: Error) => {
       console.error("Profile update error:", error);

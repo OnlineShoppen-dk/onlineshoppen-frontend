@@ -17,7 +17,7 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     registerUser.mutateAsync({ email, password, guid });
-    registerUserDetails.mutateAsync({  firstName, lastName, guid, email, phoneNumber });
+    registerUserDetails.mutateAsync({ guid,firstName, lastName, email, phoneNumber });
   };
 
   const handleChange = (e) => {
