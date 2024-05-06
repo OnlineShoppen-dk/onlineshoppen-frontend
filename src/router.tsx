@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProductGrid from "./components/ProductGrid";
-import Register from "./components/Register";
+import Register from "./pages/Register";
 
 const router = createBrowserRouter([
   {

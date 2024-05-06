@@ -1,8 +1,11 @@
+import RegisterUser from "../components/RegisterUser";
 
 const Register = () => {
   return (
-    <div>Register</div>
-  )
-}
+    <div>
+      <RegisterUser />
+    </div>
+  );
+};
 
-export default Register
+export default Register;

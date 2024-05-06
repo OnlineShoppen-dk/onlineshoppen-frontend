@@ -3,7 +3,7 @@ import { FormEvent, ChangeEvent, useState } from "react";
 import { Button, FormControl, FormLabel, Input, Stack,Box,Flex } from "@chakra-ui/react";
 import { v4 } from "uuid";
 
-const Register = () => {
+const RegisterUser = () => {
   const { registerUser, registerUserDetails } = useRegister();
   const [profile, setProfile] = useState({ 
     firstName: "",
@@ -110,4 +110,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterUser;
