@@ -1,9 +1,9 @@
 import useRegister from "../hooks/useRegister";
-import { useState } from "react";
+import { FormEvent, ChangeEvent, useState } from "react";
 import { v4 } from "uuid";
 
 const Register = () => {
-  const { registerUser,registerUserDetails } = useRegister();
+  const { registerUser, registerUserDetails } = useRegister();
   const [profile, setProfile] = useState({
     email: "",
     password: "",
@@ -14,13 +14,19 @@ const Register = () => {
   const guid = v4();
   const { email, password, firstName, lastName, phoneNumber } = profile;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     registerUser.mutateAsync({ email, password, guid });
-    registerUserDetails.mutateAsync({ guid,firstName, lastName, email, phoneNumber });
+    registerUserDetails.mutateAsync({
+      guid,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+    });
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setProfile((prevProfile) => ({
       ...prevProfile,
