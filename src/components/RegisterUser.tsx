@@ -1,4 +1,4 @@
-import useRegister from "../hooks/useRegister";
+import useRegister from "../hooks/useAuth";
 import { FormEvent, ChangeEvent, useState } from "react";
 import { Button, FormControl, FormLabel, Input, Stack,Box,Flex } from "@chakra-ui/react";
 import { v4 } from "uuid";
