@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useApiClient } from "./useApiClient";
 import { LoginRequest, ProfileRequest, RegisterRequest, AuthResponse} from "../interfaces/auth";
 
-const useRegister = () => {
+const useAuth = () => {
   const { authServiceApiClient } = useApiClient();
   const { mainServiceApiClient } = useApiClient();
 
@@ -55,4 +55,4 @@ const useRegister = () => {
   return { registerUser, registerUserDetails, login };
 };
 
-export default useRegister;
+export default useAuth;

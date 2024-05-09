@@ -1,6 +1,6 @@
 import { Product } from "../interfaces/product";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import useProductQueryStore from "../store";
+import useProductQueryStore from "../store/productStore";
 
 const useProducts = () => {
   const { productQuery } = useProductQueryStore();

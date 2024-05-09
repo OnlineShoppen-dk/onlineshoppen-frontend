@@ -1,7 +1,7 @@
 import { Button, Grid, HStack } from "@chakra-ui/react";
 import ProductCard from "./ProductCard";
 import useProducts from "../hooks/useProducts";
-import useProductQueryStore from "../store";
+import useProductQueryStore from "../store/productStore";
 
 const ProductGrid = () => {
   const { productQuery, setPage } = useProductQueryStore();
