@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <Layout />,
+    element: <Layout />,
     children: [
       { path: "", element: <ProductGrid /> },
       { path: "register", element: <Register /> }, 

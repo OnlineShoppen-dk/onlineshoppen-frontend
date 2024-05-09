@@ -43,6 +43,8 @@ const RegisterUser = () => {
       alert("Passwords do not match!");
       return;
     }
+    console.log(guid);
+    
     registerUser.mutateAsync({ email, password, guid });
     registerUserDetails.mutateAsync({
       guid,

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useApiClient } from "./useApiClient";
-import { LoginRequest, ProfileRequest, RegisterRequest, AuthResponse} from "../interfaces/auth";
+import { LoginRequest, ProfileRequest, RegisterRequest, AuthResponse, ProfileResponse} from "../interfaces/auth";
 
 const useAuth = () => {
   const { authServiceApiClient } = useApiClient();
@@ -52,7 +52,29 @@ const useAuth = () => {
     },
   });
 
-  return { registerUser, registerUserDetails, login };
+  const getUserDetails = useMutation<ProfileResponse, Error>({
+    mutationFn: async () =>
+      await mainServiceApiClient.getAxiosInstance.get(
+        "/api/user/User/get-details"
+      ),
+      onSuccess: (data) => {
+        console.log(data);
+      },
+  });
+
+
+  const logout = useMutation<string, Error>({
+    mutationFn: async () =>
+      await authServiceApiClient.getAxiosInstance.post(
+        "/api/auth/logout"
+      ),
+      onSuccess: (data) => {
+        console.log(data);
+      },
+  });
+
+
+  return { registerUser, registerUserDetails, login, logout,getUserDetails };
 };
 
 export default useAuth;

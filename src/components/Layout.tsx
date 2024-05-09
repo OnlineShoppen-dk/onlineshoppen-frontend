@@ -1,10 +1,23 @@
-import { Grid, GridItem } from "@chakra-ui/react";
-import { Outlet } from "react-router-dom";
+import { Button, Grid, GridItem } from "@chakra-ui/react";
+import { Outlet, useNavigate } from "react-router-dom";
 import SearchInput from "./SearchInput";
+import useAuth from "../hooks/useAuth";
+import useAuthStore from "../store/authStore";
 
-// Move to pages folder
 
 const Layout = () => {
+
+  const {logout: logoutApi} = useAuth();
+  const {logout: logoutStore} = useAuthStore();
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logoutApi.mutateAsync();
+    logoutStore();
+    navigate("/login")
+  };
+
   return (
     <Grid
       templateAreas={`"header header"
@@ -25,7 +38,7 @@ const Layout = () => {
         <SearchInput />
       </GridItem>
       <GridItem pl="2" bg="pink.300" area={"nav"}>
-        Nav
+      <Button onClick={handleLogout}>Logout</Button>
       </GridItem>
       <GridItem pl="2" area={"main"}>
         <Outlet />
@@ -34,6 +47,7 @@ const Layout = () => {
         Footer
       </GridItem>
     </Grid>
+
   );
 };
 

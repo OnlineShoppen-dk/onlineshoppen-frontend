@@ -20,6 +20,7 @@ import useAuthStore from "../store/authStore";
 const SignInUser = () => {
   const { login: loginApi } = useAuth();
   const { login: loginStore } = useAuthStore();
+  const {getUserDetails} = useAuth();
   const [profile, setProfile] = useState({
     email: "",
     password: "",
@@ -32,8 +33,13 @@ const SignInUser = () => {
     const { email, password } = profile;
 
     try {
+      // login here, and jwt will be signed
       await loginApi.mutateAsync({ email, password });
-      loginStore(email, password);
+
+      // jwt is being send here
+      const response = await getUserDetails.mutateAsync();
+      console.log(response.firstName);
+      loginStore(email);
       navigate("/");
     } catch (error) {
       console.error("Login failed:", error);

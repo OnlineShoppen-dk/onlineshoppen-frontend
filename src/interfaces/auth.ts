@@ -17,6 +17,14 @@ export interface ProfileRequest {
   phoneNumber: string;
 }
 
+export interface ProfileResponse {
+  firstName: string;
+  lastName: string;
+  guid: string;
+  email: string;
+  phoneNumber: string;
+}
+
 export interface AuthResponse {
   data: {
     msg: string;
