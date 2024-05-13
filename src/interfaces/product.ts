@@ -1,3 +1,4 @@
+
 export interface Product {
     id: number,
     guid: string,
@@ -15,5 +16,26 @@ export interface Product {
     isRemoved: boolean,
     imageId: string | null,
     categories: string[],
-    images: string[]
+    images: Image[]
+}
+export interface PostProductRequest {
+    guid: string,
+    name: string,
+    description: string,
+    price?: number,
+    stock?: number,
+    sold?: number,
+}
+export interface Image {
+    id: number,
+    name: string,
+    fileName: string,
+    alt: string
+}
+
+export interface Category {
+    id: number,
+    name: string,
+    description: string,
+    totalProducts: number
 }

@@ -1,51 +1,81 @@
 import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
-    TableContainer,
-    Grid,
     Box,
     Button,
+    Checkbox,
+    Flex,
+    FormControl,
+    FormLabel,
+    Grid,
     Image,
-    useDisclosure,
-    Text,
-} from "@chakra-ui/react";
-import {
+    Input,
     Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
     ModalBody,
     ModalCloseButton,
-} from "@chakra-ui/react";
-import {
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
     NumberInput,
     NumberInputField,
     NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
+    Table,
+    TableCaption,
+    Tbody,
+    Td,
+    Text,
+    Textarea,
+    Th,
+    Thead,
+    Tr,
+    useDisclosure
 } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Textarea } from "@chakra-ui/react";
-import { v4 as uuidv4 } from "uuid";
-
-import { Product } from "../interfaces/product";
 import { useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
+import { AdminProductResponse, useAdminProductQueryDashboard, useAdminProducts } from "../hooks/useAdminProducts";
+import { PostProductRequest, Product } from "../interfaces/product";
 
 function AdminDashboard() {
-    console.log("Getting products");
-    const products = GetProducts();
+    const {
+        setSearch: setSearch,
+        setSort: setSort,
+        setIncludeRemoved,
+        setPage,
+        setPageSize,
+    } = useAdminProductQueryDashboard();
+    // Admin query values are taken from the response, so we don't need to set them here
+    const {
+        data,
+        error,
+        isLoading,
+        refetch,
+        PostAdminProduct,
+        UpdateAdminProduct,
+        ActivateAdminProduct,
+        DeleteAdminProduct,
+    } = useAdminProducts();
+
+    if (isLoading) return <p>Loading products...</p>;
+    if (error) return <p>{error.message}</p>;
+    if (!data) return <p>No data</p>;
+
     return (
         <div>
             <h1>Admin Dashboard</h1>
-            <h1>Products</h1>
-            {GetProductsTable(products)}
+            <GetProductsTable
+                data={data}
+                setSearch={setSearch}
+                setSort={setSort}
+                setIncludeRemoved={setIncludeRemoved}
+                setPage={setPage}
+                setPageSize={setPageSize}
+                refetch={refetch}
+                postProduct={PostAdminProduct}
+                updateProduct={UpdateAdminProduct}
+                activateProduct={ActivateAdminProduct}
+                deleteProduct={DeleteAdminProduct}
+            />
         </div>
     );
 }
@@ -53,53 +83,279 @@ function AdminDashboard() {
 export default AdminDashboard;
 
 // Components
-function GetProductsTable(products: Product[]) {
+interface GetProductsTableProps {
+    data: AdminProductResponse;
+    setSearch: (search: string) => void;
+    setSort: (sort: AdminProductResponse["sort"]) => void;
+    setIncludeRemoved: (includeRemoved: boolean) => void;
+    setPage: (page: number) => void;
+    setPageSize: (pageSize: number) => void;
+    refetch: () => void;
+    postProduct: (product: PostProductRequest) => void;
+    updateProduct: (product: Product) => void;
+    activateProduct: (product: Product) => void;
+    deleteProduct: (product: Product) => void;
+}
+
+function GetProductsTable({ ...props }: GetProductsTableProps) {
+    const {
+        data,
+        setSearch,
+        setSort,
+        setIncludeRemoved,
+        setPage,
+        setPageSize,
+        refetch,
+        postProduct,
+        updateProduct,
+        activateProduct,
+        deleteProduct,
+    } = props;
+    const { page, pageSize, products, search, sort, totalPages, totalProducts } = data;
+
+    const handleIncludeRemoved = () => {
+        if (data.includeRemoved) {
+            setIncludeRemoved(false);
+        } else {
+            setIncludeRemoved(true);
+        }
+    };
     return (
         <Grid templateColumns="repeat(2, 1fr)" gap={6} width="80%" height="100%">
-            <Box border="1px" borderColor="gray.200" maxHeight="500px" overflowX="hidden" overflowY="scroll">
-                <Table size="sm" variant="simple">
-                    <TableCaption>Products</TableCaption>
-                    <Thead>
-                        <Tr>
-                            <Th style={{ width: "25px" }}>ID</Th>
-                            <Th style={{ width: "100px" }}>Logo</Th>
-                            <Th>Name</Th>
-                            <Th style={{ width: "25px" }}>Price</Th>
-                            <Th style={{ width: "25px" }}>Stock</Th>
-                            <Th>Actions</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {products.map((product) => (
-                            <Tr key={product.id}>
-                                <Td style={{ backgroundColor: "red" }}>{product.id}</Td>
-                                <Td style={{ backgroundColor: "orange" }}>
-                                    <ProductLogo {...product} />
-                                </Td>
-                                <Td style={{ backgroundColor: "yellow" }}>{product.name}</Td>
-                                <Td style={{ backgroundColor: "green" }}>{product.price}.-</Td>
-                                <Td style={{ backgroundColor: "blue" }}>{product.stock}</Td>
-                                <Td style={{ backgroundColor: "purple" }}>{ProductActions(product)}</Td>
+            <Box display="flex-col" flexDirection="column" gap={2}>
+                <PostProductModal postProduct={postProduct} refetch={refetch} />
+                <Box display="flex" justifyContent="space-between" margin={"4"}>
+                    {/* Search */}
+                    <ProductSearch setSearch={setSearch} search={search} />
+                    {/* Sort */}
+                    <ProductSort setSort={setSort} sort={sort} />
+                    {/* Include Sold Out */}
+                    <Box>
+                        <Checkbox isChecked={data.includeRemoved} onChange={handleIncludeRemoved}>
+                            Include Sold Out
+                        </Checkbox>
+                    </Box>
+                </Box>
+                {/* Table*/}
+                <Box
+                    border="1px"
+                    borderColor="gray.200"
+                    maxHeight="500px"
+                    overflowX="hidden"
+                    overflowY="scroll"
+                    margin={"4"}>
+                    <Table size="sm" variant="simple">
+                        <TableCaption>Products</TableCaption>
+                        <Thead>
+                            <Tr>
+                                <Th>ID</Th>
+                                <Th>Logo</Th>
+                                <Th>Name</Th>
+                                <Th>Price</Th>
+                                <Th>Stock</Th>
+                                <Th>Actions</Th>
                             </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
+                        </Thead>
+                        <Tbody>
+                            {products.map((product) => (
+                                <Tr key={product.id} backgroundColor={product.isRemoved ? "red.100" : "white"}>
+                                    <Td>{product.id}</Td>
+                                    <Td>
+                                        <ProductLogo {...product} />
+                                    </Td>
+                                    <Td>{product.name}</Td>
+                                    <Td>{product.price}.-</Td>
+                                    <Td>{product.stock}</Td>
+                                    <Td>
+                                        <ProductActions
+                                            product={product}
+                                            updateProduct={updateProduct}
+                                            activateProduct={activateProduct}
+                                            deleteProduct={deleteProduct}
+                                            refetch={refetch}
+                                        />
+                                    </Td>
+                                </Tr>
+                            ))}
+                        </Tbody>
+                    </Table>
+                </Box>
+                {/* Pagination */}
+                <ProductTablePagination
+                    page={page}
+                    pageSize={pageSize}
+                    totalPages={totalPages}
+                    totalProducts={totalProducts}
+                    setPage={setPage}
+                    setPageSize={setPageSize}
+                />
             </Box>
         </Grid>
+    );
+}
+// Sort
+interface ProductSortProps {
+    setSort: (sort: AdminProductResponse["sort"]) => void;
+    sort: AdminProductResponse["sort"];
+}
+function ProductSort({ setSort, sort }: ProductSortProps) {
+    return (
+        <Box display="flex" gap={2}>
+            <ProductSortButton currentSort={sort} setSort={setSort} value="popularity" />
+            <ProductSortButton currentSort={sort} setSort={setSort} value="name" />
+            <ProductSortButton currentSort={sort} setSort={setSort} value="price" />
+            <ProductSortButton currentSort={sort} setSort={setSort} value="stock" />
+        </Box>
+    );
+}
+// Sort Button
+interface ProductSortButtonProps {
+    currentSort: AdminProductResponse["sort"];
+    setSort: (sort: AdminProductResponse["sort"]) => void;
+    value: string;
+}
+function ProductSortButton({ currentSort, setSort, value }: ProductSortButtonProps) {
+    const sortSplit = currentSort.split("_");
+    const sortValue = sortSplit[0];
+    const sortDirection = sortSplit[1];
+
+    const handleSort = (value: string) => {
+        if (sortValue === value) {
+            const newSort = (value + (sortDirection === "asc" ? "_desc" : "_asc")) as AdminProductResponse["sort"];
+
+            setSort(newSort);
+        } else {
+            const newSort: AdminProductResponse["sort"] = (value + "_asc") as AdminProductResponse["sort"];
+            setSort(newSort);
+        }
+    };
+    return (
+        <Button size={"sm"} colorScheme={sortValue === value ? "blue" : "gray"} onClick={() => handleSort(value)}>
+            <>
+                {value}
+                {sortValue === value ? (sortDirection === "asc" ? "▲" : "▼") : ""}
+            </>
+        </Button>
+    );
+}
+
+// Search
+interface ProductSearchProps {
+    setSearch: (search: string) => void;
+    search: string;
+}
+function ProductSearch({ setSearch, search }: ProductSearchProps) {
+    const [searchInput, setSearchInput] = useState(search);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchInput(e.target.value);
+    };
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        console.log("submit", searchInput);
+        e.preventDefault();
+        setSearch(searchInput);
+    };
+    return (
+        <form onSubmit={handleSearchSubmit}>
+            <Box display="flex" gap={2}>
+                <Input size={"sm"} type="text" value={searchInput} onChange={handleSearch} />
+                <Button size={"sm"} type="submit">
+                    Search
+                </Button>
+            </Box>
+        </form>
+    );
+}
+
+// Pagination
+export interface ProductTablePaginationProps {
+    page: number;
+    pageSize: number;
+    totalPages: number;
+    totalProducts: number;
+    setPage: (page: number) => void;
+    setPageSize: (pageSize: number) => void;
+}
+function ProductTablePagination({
+    page,
+    pageSize,
+    totalPages,
+    totalProducts,
+    setPage,
+    setPageSize,
+}: ProductTablePaginationProps) {
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+    };
+    const handlePageSizeChange = (newPageSize: number) => {
+        setPageSize(newPageSize);
+    };
+    return (
+        <Box display="flex" alignItems="center" justifyContent="space-between" margin={"4"}>
+            <Flex alignItems="center">
+                <Button size={"sm"} onClick={() => handlePageChange(page - 1)} isDisabled={page <= 1} marginRight="2">
+                    Previous
+                </Button>
+                <Text marginRight="2">
+                    Page {page} of {totalPages}
+                </Text>
+                <Button size={"sm"} onClick={() => handlePageChange(page + 1)} isDisabled={page === totalPages}>
+                    Next
+                </Button>
+            </Flex>
+            <Box>
+                <Button size={"sm"} onClick={() => handlePageSizeChange(5)} isDisabled={pageSize === 5} marginRight="2">
+                    5
+                </Button>
+                <Button
+                    size={"sm"}
+                    onClick={() => handlePageSizeChange(10)}
+                    isDisabled={pageSize === 10}
+                    marginRight="2">
+                    10
+                </Button>
+                <Button
+                    size={"sm"}
+                    onClick={() => handlePageSizeChange(25)}
+                    isDisabled={pageSize === 25}
+                    marginRight="2">
+                    25
+                </Button>
+                <Button
+                    size={"sm"}
+                    onClick={() => handlePageSizeChange(50)}
+                    isDisabled={pageSize === 50}
+                    marginRight="2">
+                    50
+                </Button>
+                <Text>
+                    Showing {pageSize} of {totalProducts} products
+                </Text>
+            </Box>
+        </Box>
     );
 }
 
 // Product Logo
 function ProductLogo(product: Product) {
+    const src = product.images[0]?.fileName ?? "https://via.placeholder.com/50";
+    const alt = product.images[0]?.alt ?? product.name;
     return (
         <Box display="flex" alignItems="center" gap={2}>
-            <Image borderRadius="full" boxSize="50px" src="https://bit.ly/dan-abramov" alt="Dan Abramov" />
+            <Image borderRadius="full" boxSize="50px" src={src} alt={alt} />
         </Box>
     );
 }
 
 // Product Row
-function ProductActions(product: Product) {
+interface ProductActionsProps {
+    product: Product;
+    updateProduct: (product: Product) => void;
+    activateProduct: (product: Product) => void;
+    deleteProduct: (product: Product) => void;
+    refetch: () => void;
+}
+function ProductActions({ ...props }: ProductActionsProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -107,25 +363,70 @@ function ProductActions(product: Product) {
             <Button onClick={onOpen} colorScheme="blue" size="xs">
                 View
             </Button>
-            <ProductModal isOpen={isOpen} onClose={onClose} product={product} />
+            <ProductModal
+                isOpen={isOpen}
+                onClose={onClose}
+                product={props.product}
+                refetch={props.refetch}
+                updateProduct={props.updateProduct}
+                activateProduct={props.activateProduct}
+                deleteProduct={props.deleteProduct}
+            />
         </Box>
     );
 }
-function ProductModal({ isOpen, onClose, product }) {
+interface ProductModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    product: Product;
+    refetch: () => void;
+    updateProduct: (product: Product) => void;
+    activateProduct: (product: Product) => void;
+    deleteProduct: (product: Product) => void;
+}
+function ProductModal({ ...props }: ProductModalProps) {
+    const { isOpen, onClose, product, refetch, updateProduct, deleteProduct, activateProduct } = props;
     const [edit, setEdit] = useState(false);
     const [productEdit, setProductEdit] = useState(product);
 
-    const SaveProduct = () => {
-        console.log("Save product", productEdit);
+    // Mutation, put request
+    const updateProductAction = async () => {
+        try {
+            await updateProduct(productEdit);
+            refetch();
+            setEdit(false);
+        } catch (error) {
+            console.error("Error saving product:", error);
+        }
     };
 
-    const handleInputChange = (e, key) => {
+    const activateProductAction = async () => {
+        try {
+            await activateProduct(product);
+            refetch();
+            onClose();
+        } catch (error) {
+            console.error("Error activating product:", error);
+        }
+    };
+
+    const deleteProductAction = async () => {
+        try {
+            await deleteProduct(product);
+            refetch();
+            onClose();
+        } catch (error) {
+            console.error("Error deleting product:", error);
+        }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>, key: string) => {
         const value = e.target ? e.target.value : e;
-        console.log(value);
-        console.log(key);
-        console.log("changing");
         setProductEdit({ ...productEdit, [key]: value });
-        console.log(productEdit);
+    };
+
+    const handleSaveProduct = () => {
+        updateProductAction();
     };
 
     return (
@@ -139,10 +440,23 @@ function ProductModal({ isOpen, onClose, product }) {
             <ModalContent>
                 <ModalHeader>
                     <Box display="flex" alignItems="center">
-                        <ProductLogo {...product} />
-                        <Text ml={2}>
-                            #{product.id} : {product.name}
-                        </Text>
+                        {edit ? (
+                            <Box>
+                                <Text>Name:</Text>
+                                <Input
+                                    value={productEdit.name}
+                                    onChange={(e) => handleInputChange(e, "name")}
+                                    placeholder="Name"
+                                />
+                            </Box>
+                        ) : (
+                            <>
+                                <ProductLogo {...product} />
+                                <Text ml={2}>
+                                    #{product.id} : {product.name}
+                                </Text>
+                            </>
+                        )}
                     </Box>
                 </ModalHeader>
                 <ModalCloseButton />
@@ -238,7 +552,7 @@ function ProductModal({ isOpen, onClose, product }) {
                                 </Box>
                             </Box>
                             <ModalFooter>
-                                <Button colorScheme="blue" onClick={SaveProduct}>
+                                <Button colorScheme="blue" onClick={handleSaveProduct}>
                                     Save
                                 </Button>
                             </ModalFooter>
@@ -266,7 +580,15 @@ function ProductModal({ isOpen, onClose, product }) {
                             </Box>
                             <ModalFooter>
                                 <Box gap={3} display="flex" alignItems="center" justifyContent="space-between">
-                                    <Button colorScheme="red">Delete</Button>
+                                    {product.isRemoved ? (
+                                        <Button colorScheme="green" onClick={activateProductAction}>
+                                            Activate
+                                        </Button>
+                                    ) : (
+                                        <Button colorScheme="red" onClick={deleteProductAction}>
+                                            Delete
+                                        </Button>
+                                    )}
                                     <Button colorScheme="yellow" onClick={() => setEdit(!edit)}>
                                         {edit ? "View" : "Edit"}
                                     </Button>
@@ -283,30 +605,141 @@ function ProductModal({ isOpen, onClose, product }) {
     );
 }
 
-// Test Products
-function GetProducts() {
-    const products: Product[] = [];
-    for (let i = 0; i < 10; i++) {
-        const product: Product = {
-            id: Math.floor(Math.random() * 1000),
+// Post Product Modal
+interface PostProductModalProps {
+    postProduct: (product: PostProductRequest) => void;
+    refetch: () => void;
+}
+function PostProductModal({ ...props }: PostProductModalProps) {
+    const { postProduct, refetch } = props;
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [product, setProduct] = useState<PostProductRequest>({
+        guid: uuidv4(),
+        name: "",
+        description: "",
+        price: 0,
+        stock: 0,
+        sold: 0,
+    });
+    const handlePostProduct = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const response = await postProduct(product);
+        console.log(response);
+        // Close the modal after posting the product
+        onClose();
+
+        // Reset the product state
+        setProduct({
             guid: uuidv4(),
-            name: `Product ${i}`,
-            description: `Description for product ${i}`,
-            price: Math.floor(Math.random() * 100),
-            stock: Math.floor(Math.random() * 100),
-            sold: Math.floor(Math.random() * 100),
-            createdAt: "createdAt",
-            createdAtDate: new Date().toLocaleDateString("da-DK"),
-            createdAtTime: new Date().toLocaleTimeString("en-GB"),
-            updatedAt: "updatedAt",
-            updatedAtDate: new Date().toLocaleDateString("da-DK"),
-            updatedAtTime: new Date().toLocaleTimeString("en-GB"),
-            isRemoved: false,
-            imageId: "imageId",
-            categories: ["category"],
-            images: ["image"],
-        };
-        products.push(product);
-    }
-    return products;
+            name: "",
+            description: "",
+            price: 0,
+            stock: 0,
+            sold: 0,
+        });
+        refetch();
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setProduct((prevProduct) => ({
+            ...prevProduct,
+            [name]: value,
+        }));
+    };
+
+    const handleNumberChange = (valueAsString: string, _valueAsNumber: number, name: string) => {
+        setProduct((prevProduct) => ({
+            ...prevProduct,
+            [name]: parseInt(valueAsString),
+        }));
+    };
+
+    return (
+        <>
+            <Button size={"sm"} colorScheme="blue" onClick={onOpen}>
+                Add Product
+            </Button>
+            <Modal
+                isOpen={isOpen}
+                onClose={() => {
+                    onClose();
+                }}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>
+                        <Box display="flex" alignItems="center">
+                            <Text>Add Product</Text>
+                        </Box>
+                    </ModalHeader>
+                    <ModalCloseButton />
+                    {/* Modal Body */}
+                    <ModalBody>
+                        <form onSubmit={handlePostProduct}>
+                            <FormControl isRequired>
+                                <FormLabel>Name</FormLabel>
+                                <Input type="text" name="name" value={product.name} onChange={handleChange} />
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Description</FormLabel>
+                                <Textarea name="description" value={product.description} onChange={handleChange} />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Price</FormLabel>
+                                <NumberInput
+                                    max={100000000}
+                                    min={0}
+                                    value={product.price}
+                                    onChange={(valueAsString, _valueAsNumber) =>
+                                        handleNumberChange(valueAsString, _valueAsNumber, "price")
+                                    }>
+                                    <NumberInputField />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Stock</FormLabel>
+                                <NumberInput
+                                    max={100000000}
+                                    min={0}
+                                    value={product.stock}
+                                    onChange={(valueAsString, _valueAsNumber) =>
+                                        handleNumberChange(valueAsString, _valueAsNumber, "stock")
+                                    }>
+                                    <NumberInputField />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Sold</FormLabel>
+                                <NumberInput
+                                    max={100000000}
+                                    min={0}
+                                    value={product.sold}
+                                    onChange={(valueAsString, _valueAsNumber) =>
+                                        handleNumberChange(valueAsString, _valueAsNumber, "sold")
+                                    }>
+                                    <NumberInputField />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
+                            </FormControl>
+                            <Button type="submit" colorScheme="blue">
+                                Add Product
+                            </Button>
+                        </form>
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
+        </>
+    );
 }
