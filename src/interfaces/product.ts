@@ -15,7 +15,7 @@ export interface Product {
     updatedAtTime: string,
     isRemoved: boolean,
     imageId: string | null,
-    categories: string[],
+    categories: Category[],
     images: Image[]
 }
 export interface PostProductRequest {

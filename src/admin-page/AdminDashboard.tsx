@@ -1,3 +1,9 @@
+
+/*
+Purely for showcasing data and how they work together.
+TODO:
+- Refetching categories after adding a product to a category
+*/
 import {
     Box,
     Button,
@@ -29,13 +35,29 @@ import {
     Th,
     Thead,
     Tr,
-    useDisclosure
+    useDisclosure,
 } from "@chakra-ui/react";
+import { Divider } from "@chakra-ui/react";
 import { useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { AdminProductResponse, useAdminProductQueryDashboard, useAdminProducts } from "../hooks/useAdminProducts";
-import { PostProductRequest, Product } from "../interfaces/product";
+import { PostProductRequest, Product, Category } from "../interfaces/product";
+import { useAdminCategories } from "../hooks/useAdminCategories";
 
+function GetCategoryData() {
+    console.log("getting categories");
+    const { data, error, isLoading, refetch, AddProductToCategory } = useAdminCategories();
+    if (isLoading) return <p>Loading categories...</p>;
+    if (error) return <p>{error.message}</p>;
+    const categoryData = {
+        categories: data,
+        addProductToCategory: AddProductToCategory,
+        categoryRefetch: refetch,
+    };
+    console.log("Category Data:");
+    console.log(categoryData);
+    return categoryData;
+}
 function AdminDashboard() {
     const {
         setSearch: setSearch,
@@ -56,6 +78,11 @@ function AdminDashboard() {
         DeleteAdminProduct,
     } = useAdminProducts();
 
+    const categoryData = GetCategoryData();
+    const categories = categoryData.categories;
+    const addProductToCategory = categoryData.addProductToCategory;
+    const categoryRefetch = categoryData.categoryRefetch;
+
     if (isLoading) return <p>Loading products...</p>;
     if (error) return <p>{error.message}</p>;
     if (!data) return <p>No data</p>;
@@ -75,6 +102,9 @@ function AdminDashboard() {
                 updateProduct={UpdateAdminProduct}
                 activateProduct={ActivateAdminProduct}
                 deleteProduct={DeleteAdminProduct}
+                categories={categories}
+                addProductToCategory={addProductToCategory}
+                categoryRefetch={categoryRefetch}
             />
         </div>
     );
@@ -95,6 +125,9 @@ interface GetProductsTableProps {
     updateProduct: (product: Product) => void;
     activateProduct: (product: Product) => void;
     deleteProduct: (product: Product) => void;
+    categories: Category[];
+    addProductToCategory: (categoryId: number, productId: number) => void;
+    categoryRefetch: () => void;
 }
 
 function GetProductsTable({ ...props }: GetProductsTableProps) {
@@ -110,6 +143,9 @@ function GetProductsTable({ ...props }: GetProductsTableProps) {
         updateProduct,
         activateProduct,
         deleteProduct,
+        categories,
+        addProductToCategory,
+        categoryRefetch,
     } = props;
     const { page, pageSize, products, search, sort, totalPages, totalProducts } = data;
 
@@ -173,6 +209,9 @@ function GetProductsTable({ ...props }: GetProductsTableProps) {
                                             activateProduct={activateProduct}
                                             deleteProduct={deleteProduct}
                                             refetch={refetch}
+                                            categories={categories}
+                                            addProductToCategory={addProductToCategory}
+                                            categoryRefetch={categoryRefetch}
                                         />
                                     </Td>
                                 </Tr>
@@ -354,6 +393,9 @@ interface ProductActionsProps {
     activateProduct: (product: Product) => void;
     deleteProduct: (product: Product) => void;
     refetch: () => void;
+    categories: Category[];
+    addProductToCategory: (categoryId: number, productId: number) => void;
+    categoryRefetch: () => void;
 }
 function ProductActions({ ...props }: ProductActionsProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -371,6 +413,9 @@ function ProductActions({ ...props }: ProductActionsProps) {
                 updateProduct={props.updateProduct}
                 activateProduct={props.activateProduct}
                 deleteProduct={props.deleteProduct}
+                categories={props.categories}
+                addProductToCategory={props.addProductToCategory}
+                categoryRefetch={props.categoryRefetch}
             />
         </Box>
     );
@@ -383,11 +428,16 @@ interface ProductModalProps {
     updateProduct: (product: Product) => void;
     activateProduct: (product: Product) => void;
     deleteProduct: (product: Product) => void;
+    categories: Category[];
+    addProductToCategory: (categoryId: number, productId: number) => void;
+    categoryRefetch: () => void;
 }
 function ProductModal({ ...props }: ProductModalProps) {
     const { isOpen, onClose, product, refetch, updateProduct, deleteProduct, activateProduct } = props;
     const [edit, setEdit] = useState(false);
     const [productEdit, setProductEdit] = useState(product);
+    const { categories } = props;
+    if (!categories) return "No categories found.";
 
     // Mutation, put request
     const updateProductAction = async () => {
@@ -428,7 +478,6 @@ function ProductModal({ ...props }: ProductModalProps) {
     const handleSaveProduct = () => {
         updateProductAction();
     };
-
     return (
         <Modal
             isOpen={isOpen}
@@ -600,8 +649,100 @@ function ProductModal({ ...props }: ProductModalProps) {
                         </>
                     )}
                 </ModalBody>
+                <ModalBody>
+                    <ProductModalCategories product={product} />
+                    <Text marginTop={"8"}>Add Category</Text>
+                    <Divider size={"lg"} />
+                    {/* Add Category */}
+                    <Box display="flex-col" alignItems="center" justifyContent="space-between">
+                        {props.categories.categories.map((category) => (
+                            <CategoryRow
+                                Product={product}
+                                Category={category}
+                                addProductToCategory={props.addProductToCategory}
+                                categoryRefetch={props.categoryRefetch}
+                                key={category.id}
+                            />
+                        ))}
+                    </Box>
+                    <Divider />
+                </ModalBody>
             </ModalContent>
         </Modal>
+    );
+}
+
+interface ProductModalCategoriesProps {
+    product: Product;
+}
+function ProductModalCategories({ product }: ProductModalCategoriesProps) {
+    return (
+        <Box>
+            <Text>Categories:</Text>
+            <Box display="flex-col" alignItems="center">
+                {product.categories.map((category) => (
+                    <ProductModalCategoryRow Category={category} key={category.id} />
+                ))}
+            </Box>
+        </Box>
+    );
+}
+
+interface ProductModalCategoryRowProps {
+    Category: Category;
+}
+function ProductModalCategoryRow({ Category }: ProductModalCategoryRowProps) {
+    return (
+        <>
+            <Box display="flex" marginTop={"4"} alignItems="center" justifyContent="space-between">
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Text>
+                        #{Category.id} - {Category.name}
+                    </Text>
+                </Box>
+                <Box display="flex" alignItems="center" gap={"4"}>
+                    <Button colorScheme="red" size={"sm"}>
+                        Remove
+                    </Button>
+                </Box>
+            </Box>
+            <Divider />
+        </>
+    );
+}
+
+interface CategoryRowProps {
+    Category: Category;
+    Product: Product;
+    addProductToCategory: (categoryId: number, productId: number) => void;
+    categoryRefetch: () => void;
+}
+
+function CategoryRow({ ...props }: CategoryRowProps) {
+    const { Category, Product, addProductToCategory, categoryRefetch } = props;
+
+    const handleAddCategory = async () => {
+        await addProductToCategory(Category.id, Product.id);
+        categoryRefetch();
+        console.log("added");
+    };
+
+    return (
+        <>
+            <Box display="flex" marginTop={"4"} alignItems="center" justifyContent="space-between">
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Text>
+                        #{Category.id} - {Category.name}
+                    </Text>
+                </Box>
+                <Box display="flex" alignItems="center" gap={"4"}>
+                    <Button colorScheme="green" size={"sm"} onClick={handleAddCategory}>
+                        Add
+                    </Button>
+                </Box>
+            </Box>
+            <Divider />
+        </>
     );
 }
 
@@ -743,3 +884,5 @@ function PostProductModal({ ...props }: PostProductModalProps) {
         </>
     );
 }
+
+// Get Category Data
