@@ -18,7 +18,7 @@ const ProductGrid = () => {
     <>
       <Grid templateColumns="repeat(4, 1fr)" gap={5}>
         {products?.map((product) => (
-          <ProductCard product={product} />
+          <ProductCard product={product} key={product.id} />
         ))}
       </Grid>
       <HStack marginY={2}>

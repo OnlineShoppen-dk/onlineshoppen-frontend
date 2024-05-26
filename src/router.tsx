@@ -8,10 +8,10 @@ import AdminDashboard from "./admin-page/AdminDashboard";
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <Layout />,
+    element: <Layout />,
     children: [
       { path: "", element: <ProductGrid /> },
-      { path: "register", element: <Register /> }, 
+      { path: "register", element: <Register /> },
 
       // ProtectedRoutes
       {
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     // element: <Layout />,
     children: [
       { path: "", element: <AdminDashboard /> },
-      { path: "register", element: <Register /> }, 
+      { path: "register", element: <Register /> },
 
       // ProtectedRoutes
       {
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         children: [],
       },
     ],
-  }
+  },
 ]);
 
 export default router;
