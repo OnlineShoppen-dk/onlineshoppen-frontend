@@ -3,6 +3,7 @@ import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProductGrid from "./components/ProductGrid";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 import AdminDashboard from "./admin-page/AdminDashboard";
 
 const router = createBrowserRouter([
@@ -11,6 +12,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "", element: <ProductGrid /> },
+      { path: "login", element: <Login /> }, 
       { path: "register", element: <Register /> },
 
       // ProtectedRoutes

@@ -6,6 +6,7 @@ class ApiClient<T> {
   constructor(baseUrl: string) {
     this.axiosInstance = axios.create({
       baseURL: baseUrl,
+      withCredentials: true,
     });
   }
 
