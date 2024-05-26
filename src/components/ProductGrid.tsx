@@ -30,7 +30,7 @@ const ProductGrid = () => {
           isDisabled={productQuery.page === 1}
           className="btn btn-primary mt-3"
         >
-          Previous
+          Tilbage
         </Button>
         <Button
           onClick={() => {
@@ -42,7 +42,7 @@ const ProductGrid = () => {
           isDisabled={isPlaceholderData || !hasNextPage}
           className="btn btn-primary mt-3 ms-2"
         >
-          Next
+          Næste
         </Button>
       </HStack>
     </>

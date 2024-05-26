@@ -10,7 +10,14 @@ const useProducts = () => {
 
   return useQuery<Product[], Error>({
     queryKey: ["products", productQuery],
-    queryFn: () => client.getAll("api/Catalog"),
+    queryFn: () =>
+      client.getAll(
+        "api/Catalog" +
+          "?page=" +
+          productQuery.page +
+          "&pageSize=" +
+          productQuery.pageSize
+      ),
     placeholderData: keepPreviousData,
   });
 };
