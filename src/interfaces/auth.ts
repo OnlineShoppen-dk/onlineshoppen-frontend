@@ -18,11 +18,14 @@ export interface ProfileRequest {
 }
 
 export interface ProfileResponse {
-  firstName: string;
-  lastName: string;
-  guid: string;
-  email: string;
-  phoneNumber: string;
+  data: {
+    firstName: string;
+    lastName: string;
+    guid: string;
+    email: string;
+    phoneNumber: string;
+  }
+
 }
 
 export interface AuthResponse {

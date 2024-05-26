@@ -38,7 +38,6 @@ const SignInUser = () => {
 
       // jwt is being send here
       const response = await getUserDetails.mutateAsync();
-      console.log(response.firstName);
       loginStore(email);
       navigate("/");
     } catch (error) {
