@@ -9,6 +9,7 @@ const Layout = () => {
 
   const {logout: logoutApi} = useAuth();
   const {logout: logoutStore} = useAuthStore();
+  const {user} = useAuthStore();
 
   const navigate = useNavigate()
 
@@ -39,6 +40,9 @@ const Layout = () => {
       </GridItem>
       <GridItem pl="2" bg="pink.300" area={"nav"}>
       <Button onClick={handleLogout}>Logout</Button>
+      <h1>You are logged in as:</h1>
+      <h1>{user?.firstName}</h1>
+      <h1>{user?.email}</h1>
       </GridItem>
       <GridItem pl="2" area={"main"}>
         <Outlet />
