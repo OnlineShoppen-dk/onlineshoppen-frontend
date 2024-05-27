@@ -16,8 +16,7 @@ const useAuth = () => {
     mutationFn: async (registerData: RegisterRequest) =>
       await authServiceApiClient.getAxiosInstance.post(
         "/api/auth/register",
-        registerData,
-        { withCredentials: true }
+        registerData
       ),
     onSuccess: (response) => {
       console.log(response.data.user_details);
@@ -49,7 +48,8 @@ const useAuth = () => {
     mutationFn: async (loginData: LoginRequest) =>
       await authServiceApiClient.getAxiosInstance.post(
         "/api/auth/login",
-        loginData
+        loginData,
+        { withCredentials: true }
       ),
     onSuccess: (response) => {
       console.log(response.data.msg);
