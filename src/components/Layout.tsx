@@ -19,6 +19,10 @@ const Layout = () => {
     navigate("/login")
   };
 
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <Grid
       templateAreas={`"header header"
@@ -39,10 +43,17 @@ const Layout = () => {
         <SearchInput />
       </GridItem>
       <GridItem pl="2" bg="pink.300" area={"nav"}>
-      <Button onClick={handleLogout}>Logout</Button>
-      <h1>You are logged in as:</h1>
-      <h1>{user?.firstName}</h1>
-      <h1>{user?.email}</h1>
+      {user ? (
+          <>
+            <Button onClick={handleLogout}>Logout</Button>
+            <h1>You are logged in as:</h1>
+            <h1>{user.firstName}</h1>
+            <h1>{user.email}</h1>
+          </>
+        ) : (
+          <Button onClick={handleLogin}>Login</Button>
+        )}
+
       </GridItem>
       <GridItem pl="2" area={"main"}>
         <Outlet />
