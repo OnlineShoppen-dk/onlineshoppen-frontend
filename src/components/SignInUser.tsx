@@ -38,7 +38,7 @@ const SignInUser = () => {
 
       // jwt is being send here
       const response = await getUserDetails.mutateAsync();
-      loginStore(email);
+      loginStore(response.data.firstName,email);
       navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
