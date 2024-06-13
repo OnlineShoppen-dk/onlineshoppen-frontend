@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 
 export interface TableContainerPaginationProps {
     page: number;
@@ -9,12 +9,15 @@ export interface TableContainerPaginationProps {
 function TableContainerPagination({...props}: TableContainerPaginationProps){
     const { page, pageSize, totalPages, totalItems } = props;
     return (
-        <Box>
-            <button>Previous</button>
+        <Box display="flex" alignItems="center" justifyContent="space-between" margin={"4"} gap={2} w={"fit-content"}>
+            <Button size={"sm"}>Previous</Button>
             <Box>
                 Page {page} of {totalPages}
             </Box>
-            <button>Next</button>
+            <Button size={"sm"}>Next</Button>
+            <Box>
+                Showing {pageSize} of {totalItems} products
+            </Box>
         </Box>
     )
 }
