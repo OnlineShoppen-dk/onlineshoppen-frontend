@@ -1,10 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
-import ProtectedRoute from "./components/ProtectedRoute";
 import ProductGrid from "./components/ProductGrid";
-import Register from "./pages/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
-import AdminDashboard from "./admin-page/AdminDashboard";
+import Register from "./pages/Register";
+import AdminDashboard from "./pages/admin-pages/AdminDashboard";
+import AdminLayout from "./components/admin-components/AdminLayout";
+import AdminProducts from "./pages/admin-pages/AdminProducts";
 
 const router = createBrowserRouter([
   {
@@ -24,11 +26,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    // element: <Layout />,
+    element: <AdminLayout />,
     children: [
       { path: "", element: <AdminDashboard /> },
-      { path: "register", element: <Register /> },
-
+      { path: "products", element: <AdminProducts /> },
       // ProtectedRoutes
       {
         element: <ProtectedRoute />,

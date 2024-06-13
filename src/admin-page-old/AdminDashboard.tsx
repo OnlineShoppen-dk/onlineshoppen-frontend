@@ -58,7 +58,7 @@ function GetCategoryData() {
     console.log(categoryData);
     return categoryData;
 }
-function AdminDashboard() {
+function AdminDashboardOld() {
     const {
         setSearch: setSearch,
         setSort: setSort,
@@ -110,7 +110,7 @@ function AdminDashboard() {
     );
 }
 
-export default AdminDashboard;
+export default AdminDashboardOld;
 
 // Components
 interface GetProductsTableProps {
