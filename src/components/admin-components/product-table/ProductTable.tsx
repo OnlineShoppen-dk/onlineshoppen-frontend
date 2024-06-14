@@ -1,7 +1,5 @@
-import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Product } from "../../../interfaces/product";
-import AddProductModal from "./modals/AddProductModal";
-import EditProductModal from "./modals/EditProductModal";
 
 interface ProductTableProps {
     products: Product[];
@@ -10,11 +8,8 @@ interface ProductTableProps {
 function ProductTable({ ...props }: ProductTableProps) {
     const { products } = props;
     return (
-        <div>
-            <h1>Product Table</h1>
-            <AddProductModal />
-            <EditProductModal />
-            <Table size="sm" variant="simple">
+        <Box height="100%">
+            <Table size="sm" variant="simple" borderWidth="1px" borderColor="gray.200" padding={2}>
                 <TableCaption>Products</TableCaption>
                 <Thead>
                     <Tr>
@@ -37,7 +32,7 @@ function ProductTable({ ...props }: ProductTableProps) {
                     ))}
                 </Tbody>
             </Table>
-        </div>
+        </Box>
     );
 }
 

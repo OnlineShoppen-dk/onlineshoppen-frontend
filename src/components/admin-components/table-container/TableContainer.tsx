@@ -1,6 +1,6 @@
-import { Box, Grid } from "@chakra-ui/react";
-import TableContainerSort from "./TableContainerSort";
+import { Grid, GridItem } from "@chakra-ui/react";
 import TableContainerPagination from "./TableContainerPagination";
+import TableContainerSort from "./TableContainerSort";
 
 interface TableContainerProps {
     page: number;
@@ -11,25 +11,22 @@ interface TableContainerProps {
     children: React.ReactNode;
 }
 
-function TableContainer({...props}: TableContainerProps){
+function TableContainer({ ...props }: TableContainerProps) {
     const { sortFields, children } = props;
-    return(
-        <Grid>
-            {/* Admin Product Header */}
-            <Box>
+    return (
+        <Grid templateRows="0.5fr 9fr 1fr" maxHeight={"90vh"} gap={4} margin={4}>
+            <GridItem border="1px solid black">
                 <TableContainerSort sortFields={sortFields} />
-            </Box>
-            {/* Admin Product Body */}
-            <Box>
-                {children} 
-            </Box>
-            {/* Admin Product Footer */}
-            <Box>
+            </GridItem>
+            <GridItem border="1px solid black">
+                {children}
+            </GridItem>
+            <GridItem>
                 {/* Pagination */}
                 <TableContainerPagination {...props} />
-            </Box>
+            </GridItem>
         </Grid>
-    )
+    );
 }
 
 export default TableContainer;
