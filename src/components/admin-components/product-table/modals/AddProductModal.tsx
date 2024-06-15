@@ -15,7 +15,7 @@ function AddProductModal() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <>
-            <Button onClick={onOpen}>Add Product</Button>
+            <Button size={"xs"} onClick={onOpen}>Add Product</Button>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

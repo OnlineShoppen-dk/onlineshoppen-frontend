@@ -1,14 +1,31 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
+import { GetDataResponse } from "../../../interfaces/main-service";
 
 export interface TableContainerPaginationProps {
-    page: number;
-    pageSize: number;
-    totalPages: number;
-    totalItems: number;
+    data: GetDataResponse;
 }
 function TableContainerPagination({...props}: TableContainerPaginationProps){
-    const { page, pageSize, totalPages, totalItems } = props;
+    const { data } = props;
+    const { page, pageSize, totalPages, totalItems } = data;
+
     return (
+        <Flex justifyContent="space-between" pl={4} pr={4}> 
+            <Box display="flex" gap={2}>
+                <Button size={"xs"}>Previous</Button>
+                {page}/{totalPages}
+                <Button size={"xs"}>Next</Button>
+            </Box>
+            <Box>
+                {pageSize} of {totalItems} products
+            </Box>
+        </Flex>
+    )
+}
+
+export default TableContainerPagination;
+
+/* OLD PAGINATION
+return (
         <Box display="flex" alignItems="center" justifyContent="space-between" margin={"4"} gap={2} w={"fit-content"}>
             <Button size={"sm"}>Previous</Button>
             <Box>
@@ -20,11 +37,6 @@ function TableContainerPagination({...props}: TableContainerPaginationProps){
             </Box>
         </Box>
     )
-}
-
-export default TableContainerPagination;
-
-/* OLD PAGINATION
 // Pagination
 export interface ProductTablePaginationProps {
     page: number;

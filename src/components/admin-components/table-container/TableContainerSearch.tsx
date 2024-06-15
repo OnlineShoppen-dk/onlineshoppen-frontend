@@ -1,12 +1,14 @@
+import { Input } from '@chakra-ui/react'
+
 interface TableContainerSearchProps {
     search: string;
 }
 
 function TableContainerSearch({ search }: TableContainerSearchProps) {
     return (
-        <div>
-            <input type="text" placeholder="Search" value={search} />
-        </div>
+        <>
+            <Input size={"sm"} type="text" value={search} placeholder='Search...'/>
+        </>
     );
 }
 

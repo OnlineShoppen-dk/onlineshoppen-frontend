@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 
 interface TableContainerSortProps {
     sortFields: string[];
@@ -9,7 +9,10 @@ function TableContainerSort({...props}: TableContainerSortProps){
     return (
         <Box display="flex" gap={2}>
             {sortFields.map((sort) => (
-                <SortButton sort={sort} />
+                <SortButton 
+                    key={sort}
+                    sort={sort} 
+                />
             ))}
         </Box>
     )
@@ -25,7 +28,10 @@ function SortButton({...props}: SortButtonProps){
     const { sort } = props;
     return (
         <Box>
-            <button>{sort}</button>
+            <Button
+                size={"xs"}
+                onClick={() => console.log(sort)}
+            >{sort}</Button>
         </Box>
     )
 }
