@@ -19,6 +19,12 @@ function AdminProducts() {
         setSelectedProduct(selectedProduct);
     }
 
+    const handleSearch = (search: string) => {
+        const result = TestData.GetTestProductsByName(search, products);
+        setResult(result);
+    }
+        
+
     const refetch = () => {
         setResult(TestData.GetTestProducts({count: 25}));
         setSelectedProduct(null);
@@ -29,6 +35,7 @@ function AdminProducts() {
             <GridItem colSpan={4} maxHeight={"90vh"}>
                 <TableContainer
                     data={data}
+                    handleSearch={handleSearch}
                     refetch={refetch}
                     modal={<AddProductModal />}>
                     {/* Admin Product Body */}

@@ -1,14 +1,25 @@
-import { Input } from '@chakra-ui/react'
+import { Button, Flex, Input } from '@chakra-ui/react';
+import { useState } from 'react';
 
 interface TableContainerSearchProps {
+    handleSearch: (search: string) => void;
     search: string;
 }
 
-function TableContainerSearch({ search }: TableContainerSearchProps) {
+function TableContainerSearch({ ...props }: TableContainerSearchProps) {
+    const { handleSearch, search } = props;
+    const [searchInput, setSearchInput] = useState(search);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchInput(e.target.value);
+    }
     return (
-        <>
-            <Input size={"sm"} type="text" value={search} placeholder='Search...'/>
-        </>
+        <Flex gap={2} justifyContent={"space-between"} w={"100%"}>
+            <Input size={"sm"} type="text" value={searchInput} onChange={handleInputChange} />
+            <Button size={"sm"} type="submit" onClick={() => handleSearch(searchInput)}>
+                Search
+            </Button>
+        </Flex>
     );
 }
 

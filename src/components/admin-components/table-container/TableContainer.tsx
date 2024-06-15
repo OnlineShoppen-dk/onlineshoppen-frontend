@@ -8,12 +8,13 @@ import { IoIosRefresh } from "react-icons/io";
 interface TableContainerProps {
     data: GetDataResponse;
     refetch: () => void;
+    handleSearch: (search: string) => void;
     children: React.ReactNode;
     modal: React.ReactNode;
 }
 
 function TableContainer({ ...props }: TableContainerProps) {
-    const { children, modal, data } = props;
+    const { children, modal, data, handleSearch } = props;
     return (
         <Grid templateRows="0.3fr 9fr 1fr" maxHeight={"90vh"} gap={4} margin={4}>
             <GridItem border="1px solid black" alignContent={"center"} gap={2} padding={2} borderRadius={4}>
@@ -32,7 +33,7 @@ function TableContainer({ ...props }: TableContainerProps) {
                     </Box>
                 </Box>
                 <Box display="flex" justifyContent="space-between" mt={2}>
-                    <TableContainerSearch search={data.search} />
+                    <TableContainerSearch search={data.search} handleSearch={handleSearch} />
                 </Box>
             </GridItem>
             {/* Table */}
