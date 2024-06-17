@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Category, Product } from "../../interfaces/product";
+import { Category, Image, Product } from "../../interfaces/product";
 import { GetProductResponse } from "../../interfaces/main-service";
 
 
@@ -33,13 +33,15 @@ function GetTestProductsByName(searchInput: string, products: Product[]){
 
 function GetTestProducts({count}:{count:number}){
     const products: Product[] = [];
-    const categories = GetTestCategories({count: 15});
+    const categories = GetTestCategories({count: 25});
+    const images = GetTestImages({count: 25});
+    console.log('Images', images.length);
+    console.log('Categories', categories.length);
 
     for(let i = 0; i < count; i++){
         const createdAt = new Date().toISOString();
         const date = new Date(createdAt).toLocaleTimeString('da-DK');
         const time = new Date(createdAt).toLocaleTimeString('da-DK').replace(/\D/g, ':');
-        console.log(categories.length);
         products.push({
             id: i,
             guid: uuidv4(),
@@ -57,11 +59,10 @@ function GetTestProducts({count}:{count:number}){
             isRemoved: Math.random() < 0.1,
             imageId: null,
             categories: categories,
-            images: []
+            images: images
         });
 
     }
-
 
     const result = {
         data: {
@@ -95,13 +96,30 @@ function GetTestCategoryById(id: number, categories: Category[]){
     return categories.find(c => c.id === id);
 }
 
+function GetTestImages({count}:{count:number}){
+    const images: Image[] = [];
+    for(let i = 0; i < count; i++){
+        images.push({
+            id: i,
+            name: `Image ${i}`,
+            fileName: `/logo.jpg`,
+            alt: `Image ${i} alt text`,
+        });
+    }
+    return images;
+}
+
 const TestData = {
+    // Products
     GetTestProducts,
     GetTestProductById,
     GetTestProductByIds,
     GetTestProductsByName,
+    // Categories
     GetTestCategories,
-    GetTestCategoryById
+    GetTestCategoryById,
+    // Images
+    GetTestImages
 }
 
 export default TestData;

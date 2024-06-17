@@ -1,114 +1,172 @@
-import { Box, Button, Flex, Grid, GridItem, Table, Tbody, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Input, Text, Textarea } from "@chakra-ui/react";
 import { Product } from "../../../interfaces/product";
+import DetailsContainerCategories from "./DetailsContainerCategories";
+import DetailsContainerImages from "./DetailsContainerImages";
+import { useState } from "react";
+import EditProductCategories from "./modals/EditProductCategories";
+import EditProductImages from "./modals/EditProductImages";
 
 interface DetailsContainerProps {
     product: Product | null | undefined;
 }
 
 function DetailsContainer({ product }: DetailsContainerProps) {
+    const [edit, setEdit] = useState<boolean>(false);
     if (!product) return <Box>No product selected</Box>;
-    const {
-        id,
-        name,
-        description,
-        stock,
-        price,
-        createdAtDate,
-        createdAtTime,
-        updatedAtDate,
-        updatedAtTime,
-        images,
-        categories,
-    } = product;
 
+    // Product Values
     return (
-        <Grid margin={4} gap={4} border="1px solid black" borderRadius={4} padding={4}>
-            <Flex w="100%" justifyContent="space-between">
-                <DetailsContainerGridItem>
-                    <Text fontSize="2xl">
-                        #{id} - {name}
+        <Grid
+            templateAreas={`
+                "header header header"
+                "description stats categories"
+                "description stats categories"
+                "images images images"
+                `}
+            gridTemplateRows={"5vh 1fr 5vh"}
+            gridAutoColumns={"30vw 1fr 1fr"}
+            border="1px solid black"
+            borderRadius={4}>
+            <GridItem p="4" area={"header"}>
+                <Flex justifyContent="space-between">
+                    <Flex gap={"4"} alignItems="center">
+                        <Text fontSize={"lg"} fontWeight="bold">
+                            #{product.id}
+                        </Text>
+                        <ProductName product={product} edit={edit} />
+                    </Flex>
+                    <Flex gap={"4"}>
+                        {edit ? (
+                            <>
+                                <Button onClick={() => setEdit(false)}>Cancel</Button>
+                                <Button onClick={() => setEdit(false)}>Save</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button onClick={() => setEdit(true)}>Edit</Button>
+                                <Button>Delete</Button>
+                            </>
+                        )}
+                    </Flex>
+                </Flex>
+            </GridItem>
+            <GridItem p={4} area={"description"}>
+                <Flex justifyContent="space-between" alignItems="center" borderBottom={"1px solid black"} p={1}>
+                    <Text fontSize={"lg"} fontWeight="bold">
+                        Description
                     </Text>
-                </DetailsContainerGridItem>
-                <DetailsContainerGridItem>
-                    <Box display="flex" justifyContent="space-between" gap={4}>
-                        <Button>Edit</Button>
-                        <Button>Delete</Button>
-                    </Box>
-                </DetailsContainerGridItem>
-            </Flex>
-
-            <DetailsContainerGridItem label="Description">
-                <Text>{description}</Text>
-            </DetailsContainerGridItem>
-            <Grid gap={4} templateColumns="repeat(6, 1fr)">
-                <GridItem colSpan={2}>
-                    <DetailsContainerGridItem label="Details">
-                        <Box>
-                            <Text>Stock: {stock}</Text>
-                            <Text>Price: {price}</Text>
-                            <Text>
-                                Created At: {createdAtDate} - {createdAtTime}
-                            </Text>
-                            <Text>
-                                Updated At: {updatedAtDate} - {updatedAtTime}
-                            </Text>
-                        </Box>
-                    </DetailsContainerGridItem>
-                    <DetailsContainerGridItem label={"Categories"}>
-                        <Box maxH={"20vh"} overflowY={"auto"} w={"100%"} pl={8} pr={8}>
-                            <Table variant="simple">
-                                <Thead>
-                                    <Tr>
-                                        <Th>Id</Th>
-                                        <Th>Name</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {categories.length > 0 ? (
-                                        categories.map((c, i) => (
-                                            <Tr key={i}>
-                                                <Th>{c.id}</Th>
-                                                <Th>{c.name}</Th>
-                                            </Tr>
-                                        ))
-                                    ) : (
-                                        <Tr>
-                                            <Th>No categories</Th>
-                                        </Tr>
-                                    )}
-                                </Tbody>
-                            </Table>
-                        </Box>
-                    </DetailsContainerGridItem>
-                </GridItem>
-                <GridItem colSpan={4}>
-                    <DetailsContainerGridItem label="Images">
-                        No images {images.length > 0 && "found"}
-                    </DetailsContainerGridItem>
-                </GridItem>
-            </Grid>
+                </Flex>
+                <ProductDescription product={product} edit={edit} />
+            </GridItem>
+            <GridItem p={4} area={"stats"}>
+                <Flex justifyContent="space-between" alignItems="center" borderBottom={"1px solid black"} p={1}>
+                    <Text fontSize={"lg"} fontWeight="bold">
+                        Stats
+                    </Text>
+                </Flex>
+                <ProductStats product={product} edit={edit} />
+            </GridItem>
+            <GridItem p={4} area={"categories"}>
+                <Flex justifyContent="space-between" alignItems="center" borderBottom={"1px solid black"} p={1}>
+                    <Text fontSize={"lg"} fontWeight="bold">
+                        Categories
+                    </Text>
+                    <EditProductCategories />
+                </Flex>
+                <Box maxH={"25vh"} overflowY={"auto"} p={4}>
+                    <DetailsContainerCategories product={product} />
+                </Box>
+            </GridItem>
+            <GridItem p={4} area={"images"}>
+                <Flex justifyContent="space-between" alignItems="center" borderBottom={"1px solid black"} p={1}>
+                    <Text fontSize={"lg"} fontWeight="bold">
+                        Images
+                    </Text>
+                    <EditProductImages />
+                </Flex>
+                <Box maxH={"45vh"} overflowY={"auto"} p={4}>
+                    <DetailsContainerImages product={product} />
+                </Box>
+            </GridItem>
         </Grid>
     );
 }
-
-export default DetailsContainer;
-
-interface DetailsContainerBoxProps {
-    label?: string;
-    children: React.ReactNode;
+interface ProductNameProps {
+    product: Product;
+    edit: boolean;
 }
-function DetailsContainerGridItem({ ...props }: DetailsContainerBoxProps) {
-    const { label, children } = props;
+function ProductName({ ...props }: ProductNameProps) {
+    const { product, edit } = props;
     return (
-        <GridItem>
-            {label && (
-                <Text fontSize="lg" fontWeight="bold">
-                    {label}
-                </Text>
+        <>
+            {edit ? (
+                <Box alignContent={"center"}>
+                    <Input type="text" value={product.name} onChange={(e) => (product.name = e.target.value)} />
+                </Box>
+            ) : (
+                <Text fontSize="lg">{product.name}</Text>
             )}
-            <Box {...props} gap={4} margin={4} padding={4} borderRadius={4} border="1px solid black" w={"fit-content"}>
-                {children}
-            </Box>
-        </GridItem>
+        </>
     );
 }
+interface ProductDescriptionProps {
+    product: Product;
+    edit: boolean;
+}
+function ProductDescription({ ...props }: ProductDescriptionProps) {
+    const { product, edit } = props;
+    return (
+        <>
+            {edit ? (
+                <Box alignContent={"center"}>
+                    <Textarea resize={"none"} value={product.description} h={"25vh"} maxH={"25vh"} />
+                </Box>
+            ) : (
+                <Text fontSize="lg">{product.description}</Text>
+            )}
+        </>
+    );
+}
+interface ProductStatsProps {
+    product: Product;
+    edit: boolean;
+}
+function ProductStats({ ...props }: ProductStatsProps) {
+    const { product, edit } = props;
+    return (
+        <>
+            {edit ? (
+                <Flex direction={"column"} gap={2} p={4}>
+                    <Flex justifyContent="space-between" alignItems="center" gap={4}>
+                        <Text fontSize={"lg"}>Stock</Text>
+                        <Input
+                            type="number"
+                            value={product.stock}
+                            onChange={(e) => (product.stock = +e.target.value)}
+                        />
+                    </Flex>
+                    <Flex justifyContent="space-between" alignItems="center" gap={2}>
+                        <Text fontSize={"lg"}>Price</Text>
+                        <Input
+                            type="number"
+                            value={product.price}
+                            onChange={(e) => (product.price = +e.target.value)}
+                        />
+                    </Flex>
+                </Flex>
+            ) : (
+                <>
+                    <Text fontSize={"lg"}>Stock: {product.stock}</Text>
+                    <Text fontSize={"lg"}>Price: {product.price}</Text>
+                    <Text fontSize={"lg"}>
+                        Created At: {product.createdAtDate} - {product.createdAtTime}
+                    </Text>
+                    <Text fontSize={"lg"}>
+                        Updated At: {product.updatedAtDate} - {product.updatedAtTime}
+                    </Text>
+                </>
+            )}
+        </>
+    );
+}
+export default DetailsContainer;
