@@ -3,12 +3,17 @@ import { GetProductResponse, GetProductsResponse } from "../../interfaces/main-s
 import useAdminProductQueryStore, { AdminProductQuery } from "../../store/admin-store/adminProductStore";
 import { useApiClient } from "../useApiClient";
 
+interface AdminProducts {
+    products: GetProductsResponse;
+    product: GetProductResponse | undefined;
+}
+
 const useAdminProducts = () => {
     const { adminProductQuery } = useAdminProductQueryStore() as { adminProductQuery: AdminProductQuery };
     const { mainServiceApiClient: client } = useApiClient<GetProductsResponse>();
     const { mainServiceApiClient: clientForProduct } = useApiClient<GetProductResponse>();
 
-    return useQuery<[GetProductsResponse, GetProductResponse], Error>({
+    return useQuery<AdminProducts, Error>({
         queryKey: ["products", adminProductQuery],
         queryFn: async () => {
             const allProducts = await client.getProducts("api/admin/product?" + constructQuery(adminProductQuery));
@@ -17,7 +22,10 @@ const useAdminProducts = () => {
                 ? await clientForProduct.getProduct("api/admin/product/" + adminProductQuery.productId)
                 : undefined;
 
-            return [allProducts, product];
+            return {
+                products: allProducts,
+                product: product,
+            };
         },
     });
 };

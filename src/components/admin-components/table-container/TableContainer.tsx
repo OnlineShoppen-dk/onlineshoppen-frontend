@@ -1,13 +1,11 @@
-import { Box, Button, Grid, GridItem } from "@chakra-ui/react";
-import TableContainerPagination from "./TableContainerPagination";
-import TableContainerSort from "./TableContainerSort";
+import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { GetDataResponse } from "../../../interfaces/main-service";
+import TableContainerPagination from "./TableContainerPagination";
 import TableContainerSearch from "./TableContainerSearch";
-import { IoIosRefresh } from "react-icons/io";
+import TableContainerSort from "./TableContainerSort";
 
 interface TableContainerProps {
     data: GetDataResponse;
-    refetch: () => void;
     handleSearch: (search: string) => void;
     children: React.ReactNode;
     modal: React.ReactNode;
@@ -25,12 +23,6 @@ function TableContainer({ ...props }: TableContainerProps) {
                 <Box display="flex" justifyContent="space-between">
                     {/* Sort */}
                     <TableContainerSort sortFields={data.sortFields} />
-                    {/* Modal / Alternative functions */}
-                    <Box>
-                        <Button size={"xs"} onClick={props.refetch}>
-                            <IoIosRefresh />
-                        </Button>
-                    </Box>
                     <Box>
                         {modal}
                     </Box>

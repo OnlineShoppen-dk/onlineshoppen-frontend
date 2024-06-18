@@ -1,14 +1,15 @@
 import { Box, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Product } from "../../../interfaces/product";
+import { GetProductsResponse } from "../../../interfaces/main-service";
 
 interface ProductTableProps {
-    products: Product[];
+    data: GetProductsResponse;
     handleProductClick: (product: Product) => void;
 }
 
 function ProductTable({ ...props }: ProductTableProps) {
-    const { products, handleProductClick } = props;
-
+    const { data, handleProductClick } = props;
+    const { products } = data;
     return (
         <Box height="100%">
             <Table size="sm" variant="simple" borderWidth="1px" borderColor="gray.200" padding={2}>
