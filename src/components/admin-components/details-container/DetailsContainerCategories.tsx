@@ -8,7 +8,7 @@ interface DetailsContainerCategoriesProps {
 function DetailsContainerCategories({ ...props }: DetailsContainerCategoriesProps) {
     const { product } = props;
     const { categories } = product;
-
+    if (!categories) return <p>No categories</p>;
     return (
         <>
             <Table variant="simple">

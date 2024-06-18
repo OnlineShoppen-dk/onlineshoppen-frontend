@@ -5,13 +5,17 @@ import DetailsContainerImages from "./DetailsContainerImages";
 import { useState } from "react";
 import EditProductCategories from "./modals/EditProductCategories";
 import EditProductImages from "./modals/EditProductImages";
+import { GetProductResponse } from "../../../interfaces/main-service";
+import DetailsContainerHistory from "./DetailsContainerHistory";
 
 interface DetailsContainerProps {
-    product: Product | null | undefined;
+    data?: GetProductResponse;
 }
 
-function DetailsContainer({ product }: DetailsContainerProps) {
+function DetailsContainer({ data }: DetailsContainerProps) {
     const [edit, setEdit] = useState<boolean>(false);
+    if (!data) return <Box>No data</Box>;
+    const { product, productHistory } = data;
     if (!product) return <Box>No product selected</Box>;
 
     // Product Values
@@ -22,6 +26,7 @@ function DetailsContainer({ product }: DetailsContainerProps) {
                 "description stats categories"
                 "description stats categories"
                 "images images images"
+                "history history history"
                 `}
             gridTemplateRows={"5vh 1fr 5vh"}
             gridAutoColumns={"30vw 1fr 1fr"}
@@ -86,6 +91,16 @@ function DetailsContainer({ product }: DetailsContainerProps) {
                 </Flex>
                 <Box maxH={"45vh"} overflowY={"auto"} p={4}>
                     <DetailsContainerImages product={product} />
+                </Box>
+            </GridItem>
+            <GridItem p={4} area={"history"}>
+                <Flex justifyContent="space-between" alignItems="center" borderBottom={"1px solid black"} p={1}>
+                    <Text fontSize={"lg"} fontWeight="bold">
+                        History
+                    </Text>
+                </Flex>
+                <Box maxH={"25vh"} overflowY={"auto"} p={4}>
+                    <DetailsContainerHistory history={productHistory} />
                 </Box>
             </GridItem>
         </Grid>

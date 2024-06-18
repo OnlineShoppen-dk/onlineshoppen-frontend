@@ -1,9 +1,4 @@
-import { Product } from "./product";
-
-export interface RequestBody {
-    data: GetDataResponse;
-}
-
+import { Product, ProductHistory } from "./product";
 export interface GetDataResponse {
     page: number;
     pageSize: number;
@@ -14,6 +9,11 @@ export interface GetDataResponse {
     sort: string;
 }
 
-export interface GetProductResponse extends RequestBody {
+export interface GetProductsResponse extends GetDataResponse {
     products: Product[];
+}
+
+export interface GetProductResponse {
+    product: Product;
+    productHistory: ProductHistory[];
 }

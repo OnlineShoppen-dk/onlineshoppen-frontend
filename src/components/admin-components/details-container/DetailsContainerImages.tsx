@@ -9,6 +9,7 @@ interface DetailsContainerImagesProps {
 function DetailsContainerImages({ ...props }: DetailsContainerImagesProps) {
     const { product } = props;
     const { images } = product;
+    if (!images) return <p>No images</p>;
     return (
         <Grid gap={4} templateColumns="repeat(6, 1fr)">
             {images.length > 0 ? (
