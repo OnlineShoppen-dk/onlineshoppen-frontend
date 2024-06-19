@@ -2,13 +2,10 @@ import { Button, Grid, HStack } from "@chakra-ui/react";
 import ProductCard from "./ProductCard";
 import useProducts from "../hooks/useProducts";
 import useProductQueryStore from "../store/productStore";
-import useAuthStore from "../store/authStore";
+import ProductCardContainer from "./ProductCardContainer";
 
 const ProductGrid = () => {
   const { productQuery, setPage } = useProductQueryStore();
-  const {user} = useAuthStore();
-  console.log("user", user)
-  
 
   const { data: products, error, isLoading, isPlaceholderData } = useProducts();
 
@@ -20,9 +17,11 @@ const ProductGrid = () => {
 
   return (
     <>
-      <Grid templateColumns="repeat(4, 1fr)" gap={5}>
+      <Grid templateColumns="repeat(5, 1fr)" gap={5}>
         {products?.map((product) => (
-          <ProductCard product={product} key={product.id} />
+          <ProductCardContainer>
+            <ProductCard product={product} key={product.id} />
+          </ProductCardContainer>
         ))}
       </Grid>
       <HStack marginY={2}>

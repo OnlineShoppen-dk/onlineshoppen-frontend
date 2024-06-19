@@ -1,4 +1,10 @@
-import { SimpleGrid, GridItem, Heading, Spinner } from "@chakra-ui/react";
+import {
+  SimpleGrid,
+  GridItem,
+  Heading,
+  Spinner,
+  Stack,
+} from "@chakra-ui/react";
 import ExpandableText from "../components/ExpandableText";
 import { useParams } from "react-router-dom";
 import useProduct from "../hooks/useProduct";
@@ -16,17 +22,21 @@ const ProductDetailsPage = () => {
   return (
     <>
       <SimpleGrid
+        paddingTop={2}
         columns={{
           lg: 3,
           sm: 1,
         }}
-        spacing={5}
+        spacing={0}
         marginX={5}
       >
         <GridItem colSpan={2}>
-          <Heading>{product.name}</Heading>
+          <Heading paddingBottom={5}>{product.name}</Heading>
           <ProductImages product={product} />
-          <ExpandableText>{product.description}</ExpandableText>
+          <Stack paddingY={4}>
+            <Heading size={"md"}>Product description</Heading>
+            <ExpandableText>{product.description}</ExpandableText>
+          </Stack>
         </GridItem>
         <GridItem colSpan={1}>
           <ProductAddToCartElement product={product} />

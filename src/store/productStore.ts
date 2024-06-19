@@ -20,7 +20,7 @@ interface ProductQueryStore {
 }
 
 const useProductQueryStore = create<ProductQueryStore>((set) => ({
-  productQuery: { page: 1, pageSize: 8 },
+  productQuery: { page: 1, pageSize: 10 },
   setSearchText: (searchText) =>
     set((store) => ({ productQuery: { ...store.productQuery, searchText } })),
   setPage: (page: number) =>
@@ -36,7 +36,7 @@ const useProductQueryStore = create<ProductQueryStore>((set) => ({
   setDefaultProductQuery: () => {
     const defaultProductQuery: ProductQuery = {
       page: 1,
-      pageSize: 8,
+      pageSize: 10,
     };
     set(() => ({
       productQuery: defaultProductQuery,
