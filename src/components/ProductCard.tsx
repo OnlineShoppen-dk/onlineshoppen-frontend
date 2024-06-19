@@ -3,12 +3,14 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  HStack,
   Image,
   Text,
 } from "@chakra-ui/react";
 import { Product } from "../interfaces/product";
 import image from "../assets/toaster-image.jpg";
 import { Link, useNavigate } from "react-router-dom";
+import AddToCartButton from "./AddToCartButton";
 
 interface Props {
   product: Product;
@@ -31,7 +33,17 @@ const ProductCard = ({ product }: Props) => {
         <Image src={image} />
       </CardBody>
       <CardFooter>
-        <Text>{product.price},-</Text>
+        <HStack justifyContent="space-between" spacing={175}>
+          <Text color="blue.600" fontSize="2xl">
+            {product.price} kr
+          </Text>
+          <AddToCartButton
+            isDisabled={product.stock == 0}
+            logoOnly={true}
+            size="lg"
+            product={product}
+          />
+        </HStack>
       </CardFooter>
     </Card>
   );

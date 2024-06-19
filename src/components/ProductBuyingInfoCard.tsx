@@ -1,16 +1,14 @@
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
-  HStack,
   Heading,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { BsCart4 } from "react-icons/bs";
 import { Product } from "../interfaces/product";
+import AddToCartButton from "./AddToCartButton";
 
 interface Props {
   product: Product;
@@ -41,12 +39,10 @@ const ProductAddToCartElement = ({ product }: Props) => {
       </CardBody>
       <CardFooter>
         <VStack align={"left"}>
-          <Button isDisabled={isProductOutOfStock} colorScheme="blue">
-            <HStack spacing={2}>
-              <BsCart4 />
-              <Text>Add to cart</Text>
-            </HStack>
-          </Button>
+          <AddToCartButton
+            isDisabled={isProductOutOfStock}
+            product={product}
+          ></AddToCartButton>
         </VStack>
       </CardFooter>
     </Card>
