@@ -1,4 +1,4 @@
-import { Product, ProductHistory } from "./product";
+import { Category, Product, ProductHistory } from "./product";
 export interface GetDataResponse {
     page: number;
     pageSize: number;
@@ -11,6 +11,10 @@ export interface GetDataResponse {
 
 export interface GetProductsResponse extends GetDataResponse {
     products: Product[];
+}
+
+export interface GetCategoriesResponse {
+    categories: Category[];
 }
 
 export interface GetProductResponse {

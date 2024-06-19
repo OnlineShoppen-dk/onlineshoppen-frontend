@@ -13,10 +13,7 @@ class ApiClient<T> {
     return this.axiosInstance;
   }
 
-  getProducts = (endpoint: string) =>
-    this.axiosInstance.get<T>(endpoint).then((res) => res.data);
-
-  getProduct = (endpoint: string) =>
+  get = (endpoint: string) =>
     this.axiosInstance.get<T>(endpoint).then((res) => res.data);
   
   getAll = (endpoint: string) =>

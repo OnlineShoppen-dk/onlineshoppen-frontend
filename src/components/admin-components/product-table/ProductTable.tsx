@@ -1,15 +1,19 @@
 import { Box, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Product } from "../../../interfaces/product";
-import { GetProductsResponse } from "../../../interfaces/main-service";
+import useAdminProductQueryStore from "../../../store/admin-store/adminProductStore";
 
 interface ProductTableProps {
-    data: GetProductsResponse;
-    handleProductClick: (product: Product) => void;
+    products: Product[];
 }
 
 function ProductTable({ ...props }: ProductTableProps) {
-    const { data, handleProductClick } = props;
-    const { products } = data;
+    const { products } = props;
+    const { setProductId } = useAdminProductQueryStore();
+
+    const handleProductClick = (product: Product) => {
+        setProductId(product.id);
+    };
+
     return (
         <Box height="100%">
             <Table size="sm" variant="simple" borderWidth="1px" borderColor="gray.200" padding={2}>
@@ -26,7 +30,7 @@ function ProductTable({ ...props }: ProductTableProps) {
                 <Tbody>
                     {products.map((product) => (
                         <Tr
-                            key={product.id + '_product'}
+                            key={product.id + "_product"}
                             backgroundColor={product.isRemoved ? "red.100" : "white"}
                             _hover={{ backgroundColor: "gray.100" }}
                             cursor="pointer"

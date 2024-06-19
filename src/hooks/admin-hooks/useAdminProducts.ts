@@ -16,10 +16,10 @@ const useAdminProducts = () => {
     return useQuery<AdminProducts, Error>({
         queryKey: ["products", adminProductQuery],
         queryFn: async () => {
-            const allProducts = await client.getProducts("api/admin/product?" + constructQuery(adminProductQuery));
+            const allProducts = await client.get("api/admin/product?" + constructQuery(adminProductQuery));
 
             const product = adminProductQuery.productId
-                ? await clientForProduct.getProduct("api/admin/product/" + adminProductQuery.productId)
+                ? await clientForProduct.get("api/admin/product/" + adminProductQuery.productId)
                 : undefined;
 
             return {

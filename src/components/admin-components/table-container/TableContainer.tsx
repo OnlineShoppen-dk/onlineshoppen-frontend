@@ -6,15 +6,12 @@ import TableContainerSort from "./TableContainerSort";
 
 interface TableContainerProps {
     data: GetDataResponse;
-    handleSearch: (search: string) => void;
     children: React.ReactNode;
     modal: React.ReactNode;
 }
 
 function TableContainer({ ...props }: TableContainerProps) {
-    const { children, modal, data, handleSearch } = props;
-    console.log('at the table');
-    console.log(data);
+    const { children, modal, data } = props;
     
     return (
         <Grid templateRows="0.3fr 9fr 1fr" maxHeight={"90vh"} gap={4} margin={4}>
@@ -28,7 +25,7 @@ function TableContainer({ ...props }: TableContainerProps) {
                     </Box>
                 </Box>
                 <Box display="flex" justifyContent="space-between" mt={2}>
-                    <TableContainerSearch search={data.search} handleSearch={handleSearch} />
+                    <TableContainerSearch />
                 </Box>
             </GridItem>
             {/* Table */}
