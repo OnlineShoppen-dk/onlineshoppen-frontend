@@ -21,12 +21,14 @@ import useAdminCategories from "../../../../hooks/admin-hooks/useAdminCategories
 import { Category, Product } from "../../../../interfaces/product";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAdminCategoryQueryStore from "../../../../store/admin-store/adminCategoryStore";
+import useAdminProductQueryStore from "../../../../store/admin-store/adminProductStore";
 
 interface EditProductCategoriesProps {
     product: Product;
 }
 function EditProductCategories({ ...props }: EditProductCategoriesProps) {
     const { adminCategoryQuery } = useAdminCategoryQueryStore();
+    const { adminProductQuery } = useAdminProductQueryStore();
     const { product } = props;
     const queryClient = useQueryClient();
     const toast = useToast();
@@ -52,15 +54,15 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
                     body: JSON.stringify(product),
                 }
             );
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
+            console.log('returning');
+            return response;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["categories", adminCategoryQuery],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["products", adminProductQuery],
             });
             toast({
                 title: "Category updated",
@@ -69,6 +71,14 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
                 isClosable: true,
             });
         },
+        onError: () => {
+            toast({
+                title: "Category update failed",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
     });
 
     if (!data) {

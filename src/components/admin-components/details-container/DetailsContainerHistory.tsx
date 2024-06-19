@@ -25,7 +25,9 @@ function DetailsContainerHistory({ ...props }: DetailsContainerHistoryProps) {
                                 <Th>{c.id}</Th>
                                 <Th>{c.name}</Th>
                                 <Th>{c.price}</Th>
-                                <Th>{c.updatedAt}</Th>
+                                <Th>
+                                    {formatDateAndTime(c.updatedAt)}
+                                </Th>
                             </Tr>
                         ))
                     ) : (
@@ -38,5 +40,10 @@ function DetailsContainerHistory({ ...props }: DetailsContainerHistoryProps) {
         </>
     );
 }
+
+const formatDateAndTime = (date: string) => {
+    const d = new Date(date);
+    return d.toLocaleDateString("da-DK") + " " + d.toLocaleTimeString("da-DK");
+};
 
 export default DetailsContainerHistory;
