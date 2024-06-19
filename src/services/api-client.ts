@@ -5,7 +5,7 @@ class ApiClient<T> {
 
   constructor(baseUrl: string) {
     this.axiosInstance = axios.create({
-      baseURL: baseUrl
+      baseURL: baseUrl,
     });
   }
 
@@ -15,6 +15,11 @@ class ApiClient<T> {
 
   getAll = (endpoint: string) =>
     this.axiosInstance.get<T[]>(endpoint).then((res) => res.data);
+
+  getOne = (endpoint: string, productId: string) =>
+    this.axiosInstance
+      .get<T>(`${endpoint}/${productId}`)
+      .then((res) => res.data);
 }
 
 export default ApiClient;

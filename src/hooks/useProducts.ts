@@ -8,17 +8,22 @@ const useProducts = () => {
 
   const { catalogServiceApiClient: client } = useApiClient<Product>();
 
+  let query =
+    "api/Catalog" +
+    "?page=" +
+    productQuery.page +
+    "&pageSize=" +
+    productQuery.pageSize;
+
+  if (productQuery.searchText) query += "&search=" + productQuery.searchText;
+
   return useQuery<Product[], Error>({
     queryKey: ["products", productQuery],
-    queryFn: () =>
-      client.getAll(
-        "api/Catalog" +
-          "?page=" +
-          productQuery.page +
-          "&pageSize=" +
-          productQuery.pageSize
-      ),
+    queryFn: () => client.getAll(query),
     placeholderData: keepPreviousData,
+    staleTime: 1000 * 10,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 };
 
