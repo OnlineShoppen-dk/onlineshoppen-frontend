@@ -13,9 +13,13 @@ const useProducts = () => {
     "?page=" +
     productQuery.page +
     "&pageSize=" +
-    productQuery.pageSize;
+    productQuery.pageSize +
+    "&sort=" +
+    productQuery.sortOrder;
 
   if (productQuery.searchText) query += "&search=" + productQuery.searchText;
+  if (productQuery.minPrice) query += "&minPrice=" + productQuery.minPrice;
+  if (productQuery.maxPrice) query += "&maxPrice=" + productQuery.maxPrice;
 
   return useQuery<Product[], Error>({
     queryKey: ["products", productQuery],
