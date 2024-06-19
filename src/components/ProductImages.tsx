@@ -1,5 +1,4 @@
 import { Image, SimpleGrid } from "@chakra-ui/react";
-import React from "react";
 import { Product, Image as ProductImage } from "../interfaces/product";
 import toasterImage from "../assets/toaster-image.jpg";
 

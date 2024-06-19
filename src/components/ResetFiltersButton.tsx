@@ -1,5 +1,4 @@
 import { Button } from "@chakra-ui/react";
-import React from "react";
 import useProductQueryStore from "../store/productStore";
 
 const ResetFiltersButton = () => {
