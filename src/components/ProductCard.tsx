@@ -33,7 +33,7 @@ const ProductCard = ({ product }: Props) => {
         <Image src={image} />
       </CardBody>
       <CardFooter>
-        <HStack justifyContent="space-between" spacing={175}>
+        <HStack justifyContent="space-between" w="full">
           <Text color="blue.600" fontSize="2xl">
             {product.price} kr
           </Text>
