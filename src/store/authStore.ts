@@ -12,9 +12,17 @@ interface AuthStore {
 }
 
 const useAuthStore = create<AuthStore>((set) => ({
-  user: null,
-  login: (firstName: string, email: string) => set({ user: { firstName, email } }),
-  logout: () => set({ user: null }),
+  user: JSON.parse(localStorage.getItem("user") || "null"),
+  login: (firstName: string, email: string) => {
+    const user = { firstName, email };
+    localStorage.setItem("user", JSON.stringify(user));
+    set({ user });
+  },
+
+  logout: () => {
+      localStorage.removeItem('user');
+      set({ user: null });
+    },
 }));
 
 export default useAuthStore;

@@ -44,6 +44,7 @@ const SignInUser = () => {
       navigate("/");
     } catch (errorRes: unknown) {
       const error = errorRes as ErrorResponse
+      console.log("errorr here", error)
       toast.error(error.response.data.msg);
       console.error("Login failed:", error);
     }

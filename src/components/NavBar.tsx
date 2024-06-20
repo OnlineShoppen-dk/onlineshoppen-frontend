@@ -32,7 +32,7 @@ const NavBar = () => {
       {user ? (
         <>
           <Button onClick={handleLogout}>Logout</Button>
-          <h1>You are logged in as:</h1>
+          <h1>Welcome</h1>
           <h1>{user.firstName}</h1>
           <h1>{user.email}</h1>
         </>
