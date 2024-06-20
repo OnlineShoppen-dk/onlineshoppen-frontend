@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useApiClient } from "./useApiClient";
+import { ErrorResponse } from "../interfaces/auth";
 import {
   LoginRequest,
   ProfileRequest,
@@ -12,7 +13,7 @@ const useAuth = () => {
   const { authServiceApiClient } = useApiClient();
   const { mainServiceApiClient } = useApiClient();
 
-  const registerUser = useMutation<AuthResponse, Error, RegisterRequest>({
+  const registerUser = useMutation<AuthResponse, ErrorResponse, RegisterRequest>({
     mutationFn: async (registerData: RegisterRequest) =>
       await authServiceApiClient.getAxiosInstance.post(
         "/api/auth/register",
@@ -21,8 +22,8 @@ const useAuth = () => {
     onSuccess: (response) => {
       console.log(response.data.user_details);
     },
-    onError: (error: Error) => {
-      console.error("Registration error:", error);
+    onError: (error: ErrorResponse) => {
+      console.error("Registration error:", error.message);
     },
   });
 

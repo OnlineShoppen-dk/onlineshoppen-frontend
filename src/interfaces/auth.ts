@@ -37,3 +37,13 @@ export interface AuthResponse {
     };
   };
 }
+
+export interface ErrorResponse {
+  response: {
+    status: number;
+    data: {
+      msg: string;
+    };
+  };
+  message: string;
+}

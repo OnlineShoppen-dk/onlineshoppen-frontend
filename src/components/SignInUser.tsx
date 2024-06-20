@@ -16,6 +16,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import useAuthStore from "../store/authStore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ErrorResponse } from "../interfaces/auth";
+
 
 const SignInUser = () => {
   const { login: loginApi } = useAuth();
@@ -33,14 +37,14 @@ const SignInUser = () => {
     const { email, password } = profile;
 
     try {
-      // login here, and jwt will be signed
       await loginApi.mutateAsync({ email, password });
 
-      // jwt is being send here
       const response = await getUserDetails.mutateAsync();
       loginStore(response.data.firstName,email);
       navigate("/");
-    } catch (error) {
+    } catch (errorRes: unknown) {
+      const error = errorRes as ErrorResponse
+      toast.error(error.response.data.msg);
       console.error("Login failed:", error);
     }
   };
@@ -59,6 +63,12 @@ const SignInUser = () => {
       py={{ base: "12", md: "24" }}
       px={{ base: "0", sm: "8" }}
     >
+<ToastContainer
+        autoClose={3000}
+        closeOnClick={true}
+        position="top-center"
+        limit={3}
+      />
       <Stack spacing="8">
         <Stack spacing="6">
           <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
@@ -98,9 +108,7 @@ const SignInUser = () => {
                 />
               </FormControl>
               <HStack justify="space-between">
-                <Checkbox defaultChecked>Remember me</Checkbox>
                 <Button variant="text" size="sm">
-                  Forgot password?
                 </Button>
               </HStack>
               <Stack spacing="6">

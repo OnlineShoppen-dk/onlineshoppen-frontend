@@ -13,9 +13,12 @@ import {
 } from "@chakra-ui/react";
 import { v4 } from "uuid";
 import useAuth from "../hooks/useAuth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ErrorResponse } from "../interfaces/auth";
 
 const RegisterUser = () => {
-  const { registerUser, registerUserDetails } = useAuth()
+  const { registerUser, registerUserDetails } = useAuth();
   const [profile, setProfile] = useState({
     firstName: "",
     lastName: "",
@@ -24,7 +27,6 @@ const RegisterUser = () => {
     confirmPassword: "",
     phoneNumber: "",
   });
-
 
   const guid = v4();
 
@@ -40,19 +42,25 @@ const RegisterUser = () => {
     } = profile;
 
     if (confirmPassword && password !== confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
-    console.log(guid);
-    
-    registerUser.mutateAsync({ email, password, guid });
-    registerUserDetails.mutateAsync({
-      guid,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-    });
+
+    try {
+      await registerUser.mutateAsync({ email, password, guid });
+      await registerUserDetails.mutateAsync({
+        guid,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+      });
+      toast.success("Registration successful!");
+    } catch (errorRes: unknown) {
+      const error = errorRes as ErrorResponse
+      console.log("error", error)
+      toast.error(error.response.data.msg);
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -69,6 +77,12 @@ const RegisterUser = () => {
       py={{ base: "12", md: "24" }}
       px={{ base: "0", sm: "8" }}
     >
+      <ToastContainer
+        autoClose={3000}
+        closeOnClick={true}
+        position="top-center"
+        limit={3}
+      />
       <Stack spacing="8">
         <Stack spacing="6">
           <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
