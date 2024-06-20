@@ -41,7 +41,7 @@ function DetailsContainer({ ...props }: DetailsContainerProps) {
                         </Text>
                     </Flex>
                     {/* Edit product modal */}
-                    <Flex>
+                    <Flex gap={4}>
                         {product.isRemoved ?
                         (
                             <RestoreProductModal product={product} />
@@ -80,7 +80,7 @@ function DetailsContainer({ ...props }: DetailsContainerProps) {
                         "updatedAtLabel updatedAtValue updatedAtValue updatedAtValue"
                     `}
                     gridTemplateRows={"5vh 5vh 5vh 5vh"}
-                    gridAutoColumns={"7.5vw auto"}
+                    gridAutoColumns={"5vw auto"}
                     pt={4}>
                     <GridItem area={"priceLabel"} p={2}>
                         <Text fontSize={"lg"}>Price</Text>
@@ -95,13 +95,13 @@ function DetailsContainer({ ...props }: DetailsContainerProps) {
                         <Text fontSize={"lg"}>{product.stock} pcs.</Text>
                     </GridItem>
                     <GridItem area={"createdAtLabel"} p={2}>
-                        <Text fontSize={"lg"}>Created At</Text>
+                        <Text fontSize={"lg"}>Created</Text>
                     </GridItem>
                     <GridItem area={"createdAtValue"} p={2}>
                         <Text fontSize={"lg"}>{formatDateAndTime(product.createdAt)}</Text>
                     </GridItem>
                     <GridItem area={"updatedAtLabel"} p={2}>
-                        <Text fontSize={"lg"}>Updated At</Text>
+                        <Text fontSize={"lg"}>Updated</Text>
                     </GridItem>
                     <GridItem area={"updatedAtValue"} p={2}>
                         <Text fontSize={"lg"}>{formatDateAndTime(product.updatedAt)}</Text>

@@ -32,13 +32,13 @@ function AdminProductsPage({ ...props }: AdminProductsPageProps) {
     return (
         <Grid templateColumns="repeat(12, 1fr)" maxH="90vh">
             {/* TableContainer */}
-            <GridItem colSpan={4} maxHeight={"90vh"}>
+            <GridItem colSpan={4} maxHeight={"90vh"} p={4}>
                 <TableContainer data={convertToGetDataResponse(productsResponse)} modal={<AddProductModal />}>
                     <ProductTable products={productsResponse.products} />
                 </TableContainer>
             </GridItem>
             {/* DetailsContainer */}
-            <GridItem colSpan={8}>
+            <GridItem colSpan={8} p={8}>
                 {productResponse ? (
                     <DetailsContainer
                         product={productResponse.product}
