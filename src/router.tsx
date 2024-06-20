@@ -1,9 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "./components/Layout";
-import ProductGrid from "./components/ProductGrid";
+import Layout from "./pages/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
+import HomePage from "./pages/HomePage";
+import AboutUs from "./pages/AboutUs";
+import Contact from "./pages/Contact";
+
 import AdminDashboard from "./pages/admin-pages/AdminDashboard";
 import AdminLayout from "./components/admin-components/AdminLayout";
 import AdminProducts from "./pages/admin-pages/AdminProducts";
@@ -13,9 +17,12 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
-      { path: "", element: <ProductGrid /> },
-      { path: "login", element: <Login /> }, 
+      { path: "", element: <HomePage /> },
+      { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
+      { path: "products/:productId", element: <ProductDetailsPage /> },
+      { path: "about", element: <AboutUs /> },
+      { path: "contact", element: <Contact /> },
 
       // ProtectedRoutes
       {
