@@ -54,7 +54,6 @@ const Layout = () => {
           <Button onClick={handleLogin}>Login</Button>
         )}
 
-        <Button>Cart</Button>
       </GridItem>
       <GridItem pl="2" area={"main"}>
         <Outlet />
