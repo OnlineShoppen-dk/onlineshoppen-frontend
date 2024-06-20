@@ -75,8 +75,8 @@ const SignInUser = () => {
               Log in to your account
             </Heading>
             <Text>
-              Har du ikke oprettet en konto?{" "}
-              <Link href="/register">Opret her</Link>
+              Don't have an account?{" "}
+              <Link href="/register">Create an account here</Link>
             </Text>
           </Stack>
         </Stack>

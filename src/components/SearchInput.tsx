@@ -25,7 +25,7 @@ const SearchInput = () => {
         <Input
           ref={ref}
           borderRadius={20}
-          placeholder="Søg produkter..."
+          placeholder="Search products..."
           variant="filled"
           flex="1"
           width="100%"
