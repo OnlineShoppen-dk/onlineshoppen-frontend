@@ -19,8 +19,8 @@ const ProductGrid = () => {
     <>
       <Grid templateColumns="repeat(5, 1fr)" gap={5}>
         {products?.map((product) => (
-          <ProductCardContainer>
-            <ProductCard product={product} key={product.id} />
+          <ProductCardContainer key={product.id}>
+            <ProductCard product={product} />
           </ProductCardContainer>
         ))}
       </Grid>
