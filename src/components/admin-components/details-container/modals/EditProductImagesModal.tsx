@@ -19,12 +19,15 @@ import {
 import { Product } from "../../../../interfaces/product";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAdminProductQueryStore from "../../../../store/admin-store/adminProductStore";
+import { useApiClient } from "../../../../hooks/useApiClient";
+import getImageUrl from "../../../../services/get-image-url";
 
 interface EditProductImagesProps {
     product: Product;
 }
 function EditProductImages({ ...props }: EditProductImagesProps) {
     const { adminProductQuery } = useAdminProductQueryStore();
+    const { mainServiceApiClient: client } = useApiClient<Product>();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast();
     const queryClient = useQueryClient();
@@ -46,12 +49,7 @@ function EditProductImages({ ...props }: EditProductImagesProps) {
 
     const mutationRemoveImage = useMutation({
         mutationFn: async (imageId: number) => {
-            const response = await fetch(
-                `http://localhost:8081/api/admin/product/${product.id}/delete-image/${imageId}`,
-                {
-                    method: "DELETE",
-                }
-            );
+          const response = await client.delete(`api/admin/product/${product.id}/delete-image/${imageId}`);
             return response;
         },
         onSuccess: () => {
@@ -127,7 +125,7 @@ function EditProductImages({ ...props }: EditProductImagesProps) {
                                 <Flex flexDir="column"
                                  key={i} border="1px solid black" borderRadius={8} p={8} justifyContent={"space-between"}>
                                     <Image
-                                        src={`http://localhost:8081/Image/${img.fileName}`}
+                                        src={getImageUrl(img.fileName)}
                                         alt={img.alt}
                                         borderRadius={16}
                                     />

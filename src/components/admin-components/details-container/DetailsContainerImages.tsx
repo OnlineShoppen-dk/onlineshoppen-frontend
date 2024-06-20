@@ -1,6 +1,7 @@
-import { Box, Image } from '@chakra-ui/react'
+import { Box, Image } from "@chakra-ui/react";
 import { Grid } from "@chakra-ui/react";
 import { Product } from "../../../interfaces/product";
+import getImageUrl from "../../../services/get-image-url";
 
 interface DetailsContainerImagesProps {
     product: Product;
@@ -15,10 +16,7 @@ function DetailsContainerImages({ ...props }: DetailsContainerImagesProps) {
             {images.length > 0 ? (
                 images.map((img, i) => (
                     <Box key={i}>
-                        <Image 
-                            src={`http://localhost:8081/Image/${img.fileName}`} alt={img.alt} 
-                            borderRadius={16}
-                        />
+                        <Image src={getImageUrl(img.fileName)} alt={img.alt} borderRadius={16} />
                     </Box>
                 ))
             ) : (

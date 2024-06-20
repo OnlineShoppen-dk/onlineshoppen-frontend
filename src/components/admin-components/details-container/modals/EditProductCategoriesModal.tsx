@@ -22,11 +22,13 @@ import { Category, Product } from "../../../../interfaces/product";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAdminCategoryQueryStore from "../../../../store/admin-store/adminCategoryStore";
 import useAdminProductQueryStore from "../../../../store/admin-store/adminProductStore";
+import { useApiClient } from "../../../../hooks/useApiClient";
 
 interface EditProductCategoriesProps {
     product: Product;
 }
 function EditProductCategories({ ...props }: EditProductCategoriesProps) {
+    const { mainServiceApiClient: client } = useApiClient<Product>();
     const { adminCategoryQuery } = useAdminCategoryQueryStore();
     const { adminProductQuery } = useAdminProductQueryStore();
     const { product } = props;
@@ -48,17 +50,7 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
     // TODO: Change this with the api client
     const mutationAddCategory = useMutation({
         mutationFn: async (category: Category) => {
-            const response = await fetch(
-                `http://localhost:8081/api/admin/category/${category.id}/add-product/${product.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(product),
-                }
-            );
-            console.log('returning');
+            const response = await client.post(`api/admin/category/${category.id}/add-product/${product.id}`, product);
             return response;
         },
         onSuccess: () => {
@@ -82,21 +74,12 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
                 duration: 3000,
                 isClosable: true,
             });
-        }
+        },
     });
 
     const mutationRemoveCategory = useMutation({
         mutationFn: async (category: Category) => {
-            const response = await fetch(
-                `http://localhost:8081/api/admin/category/${category.id}/remove-product/${product.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(product),
-                }
-            );
+            const response = await client.post(`api/admin/category/${category.id}/remove-product/${product.id}`, product);
             return response;
         },
         onSuccess: () => {
@@ -120,7 +103,7 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
                 duration: 3000,
                 isClosable: true,
             });
-        }
+        },
     });
     if (!data) {
         return <div>...</div>;
@@ -157,7 +140,10 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
                                         <Td>{category.id}</Td>
                                         <Td>{category.name}</Td>
                                         <Td>
-                                            <Button size={"xs"} colorScheme="red" onClick={() => handleRemoveCategory(category)}>
+                                            <Button
+                                                size={"xs"}
+                                                colorScheme="red"
+                                                onClick={() => handleRemoveCategory(category)}>
                                                 Remove
                                             </Button>
                                         </Td>

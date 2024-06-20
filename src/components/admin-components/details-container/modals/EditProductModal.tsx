@@ -22,15 +22,19 @@ import { useEffect, useState } from "react";
 import { Product } from "../../../../interfaces/product";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAdminProductQueryStore from "../../../../store/admin-store/adminProductStore";
+import { useApiClient } from "../../../../hooks/useApiClient";
 
 interface EditProductProps {
     selectedProduct: Product;
 }
 
 function EditProduct({ ...props }: EditProductProps) {
-    const queryClient = useQueryClient();
-    const { adminProductQuery } = useAdminProductQueryStore();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    
+    const { mainServiceApiClient: client } = useApiClient<Product>();
+    const { adminProductQuery } = useAdminProductQueryStore();
+    const queryClient = useQueryClient();
+
     const { selectedProduct } = props;
     const [product, setProduct] = useState<Product>(selectedProduct);
     const toast = useToast();
@@ -46,22 +50,10 @@ function EditProduct({ ...props }: EditProductProps) {
         setProduct({ ...product, [name]: value });
     };
 
-
-    // TODO: Change this with the api client
     const mutationUpdateProduct = useMutation({
         mutationFn: async (product: Product) => {
-            const response = await fetch(`http://localhost:8081/api/admin/product/${product.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(product),
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
+            const response = await client.put(`api/admin/product/${product.id}`, product);
+            return response;
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
