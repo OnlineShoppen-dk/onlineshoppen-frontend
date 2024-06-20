@@ -40,7 +40,6 @@ function ProductTable({ ...props }: ProductTableProps) {
                             <Td>{product.price}.-</Td>
                             <Td>{product.stock}</Td>
                             <Td>{product.sold}</Td>
-                            <Td>{product.isRemoved ? "Removed" : ""}</Td>
                         </Tr>
                     ))}
                 </Tbody>

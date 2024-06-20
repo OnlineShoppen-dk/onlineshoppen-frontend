@@ -6,6 +6,8 @@ import DetailsContainerImages from "./DetailsContainerImages";
 import EditProductCategories from "./modals/EditProductCategoriesModal";
 import EditProductImages from "./modals/EditProductImagesModal";
 import EditProduct from "./modals/EditProductModal";
+import RemoveProductModal from "./modals/RemoveProductModal";
+import RestoreProductModal from "./modals/RestoreProductModal";
 
 interface DetailsContainerProps {
     product: Product;
@@ -14,7 +16,6 @@ interface DetailsContainerProps {
 
 function DetailsContainer({ ...props }: DetailsContainerProps) {
     const { product, productHistory } = props;
-
     return (
         <Grid
             templateAreas={`
@@ -40,7 +41,19 @@ function DetailsContainer({ ...props }: DetailsContainerProps) {
                         </Text>
                     </Flex>
                     {/* Edit product modal */}
-                    <EditProduct selectedProduct={product} />
+                    <Flex>
+                        {product.isRemoved ?
+                        (
+                            <RestoreProductModal product={product} />
+                        )
+                        :
+                        (
+                            <RemoveProductModal product={product} />
+                        )
+                        }
+                        
+                        <EditProduct selectedProduct={product} />
+                    </Flex>
                 </Flex>
             </GridItem>
             {/* Description */}
@@ -68,8 +81,7 @@ function DetailsContainer({ ...props }: DetailsContainerProps) {
                     `}
                     gridTemplateRows={"5vh 5vh 5vh 5vh"}
                     gridAutoColumns={"7.5vw auto"}
-                    pt={4}
-                >
+                    pt={4}>
                     <GridItem area={"priceLabel"} p={2}>
                         <Text fontSize={"lg"}>Price</Text>
                     </GridItem>

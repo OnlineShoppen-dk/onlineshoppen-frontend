@@ -79,7 +79,10 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
 
     const mutationRemoveCategory = useMutation({
         mutationFn: async (category: Category) => {
-            const response = await client.post(`api/admin/category/${category.id}/remove-product/${product.id}`, product);
+            const response = await client.post(
+                `api/admin/category/${category.id}/remove-product/${product.id}`,
+                product
+            );
             return response;
         },
         onSuccess: () => {
@@ -109,9 +112,6 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
         return <div>...</div>;
     }
     const { categories } = data.categories;
-
-    console.log("PRODUCt");
-    console.log(product);
 
     return (
         <>
