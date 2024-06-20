@@ -57,8 +57,8 @@ const RegisterUser = () => {
       });
       toast.success("Registration successful!");
     } catch (errorRes: unknown) {
-      const error = errorRes as ErrorResponse
-      console.log("error", error)
+      const error = errorRes as ErrorResponse;
+      console.log("error", error);
       toast.error(error.response.data.msg);
     }
   };
@@ -88,7 +88,7 @@ const RegisterUser = () => {
           <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
             <Heading size={{ base: "xs", md: "sm" }}>Create an account</Heading>
             <Text color="fg.muted">
-              Har du oprettet en konto? <Link href="/login">Log in her</Link>
+              Already have an account? <Link href="/login">Log in here</Link>
             </Text>
           </Stack>
         </Stack>
@@ -164,7 +164,7 @@ const RegisterUser = () => {
                   _hover={{ backgroundColor: "#1e72e8" }}
                   type="submit"
                 >
-                  Opret konto
+                  Create account
                 </Button>
               </Stack>
             </form>
