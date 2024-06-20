@@ -16,7 +16,7 @@ function DetailsContainerImages({ ...props }: DetailsContainerImagesProps) {
                 images.map((img, i) => (
                     <Box key={i}>
                         <Image 
-                            src={img.fileName} alt={img.alt} 
+                            src={`http://localhost:8081/Image/${img.fileName}`} alt={img.alt} 
                             borderRadius={16}
                         />
                     </Box>

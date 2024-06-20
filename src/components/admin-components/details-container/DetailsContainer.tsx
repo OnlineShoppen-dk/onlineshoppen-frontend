@@ -114,7 +114,7 @@ function DetailsContainer({ ...props }: DetailsContainerProps) {
                     <Text fontSize={"lg"} fontWeight="bold">
                         Images
                     </Text>
-                    <EditProductImages />
+                    <EditProductImages product={product} />
                 </Flex>
                 <Box maxH={"45vh"} overflowY={"auto"} p={4}>
                     <DetailsContainerImages product={product} />

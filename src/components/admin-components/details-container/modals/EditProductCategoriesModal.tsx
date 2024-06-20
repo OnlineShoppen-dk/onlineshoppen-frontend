@@ -41,6 +41,10 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
         mutationAddCategory.mutate(category);
     };
 
+    const handleRemoveCategory = (category: Category) => {
+        mutationRemoveCategory.mutate(category);
+    };
+
     // TODO: Change this with the api client
     const mutationAddCategory = useMutation({
         mutationFn: async (category: Category) => {
@@ -81,6 +85,43 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
         }
     });
 
+    const mutationRemoveCategory = useMutation({
+        mutationFn: async (category: Category) => {
+            const response = await fetch(
+                `http://localhost:8081/api/admin/category/${category.id}/remove-product/${product.id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(product),
+                }
+            );
+            return response;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["categories", adminCategoryQuery],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["products", adminProductQuery],
+            });
+            toast({
+                title: "Category removed",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+        },
+        onError: () => {
+            toast({
+                title: "Category update failed",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    });
     if (!data) {
         return <div>...</div>;
     }
@@ -116,7 +157,7 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
                                         <Td>{category.id}</Td>
                                         <Td>{category.name}</Td>
                                         <Td>
-                                            <Button size={"xs"} colorScheme="red">
+                                            <Button size={"xs"} colorScheme="red" onClick={() => handleRemoveCategory(category)}>
                                                 Remove
                                             </Button>
                                         </Td>
