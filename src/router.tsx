@@ -3,11 +3,14 @@ import Layout from "./pages/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import AdminDashboard from "./admin-page/AdminDashboard";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import HomePage from "./pages/HomePage";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
+
+import AdminDashboard from "./pages/admin-pages/AdminDashboard";
+import AdminLayout from "./components/admin-components/AdminLayout";
+import AdminProducts from "./pages/admin-pages/AdminProducts";
 
 const router = createBrowserRouter([
   {
@@ -30,11 +33,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    // element: <Layout />,
+    element: <AdminLayout />,
     children: [
       { path: "", element: <AdminDashboard /> },
-      { path: "register", element: <Register /> },
-
+      { path: "products", element: <AdminProducts /> },
       // ProtectedRoutes
       {
         element: <ProtectedRoute />,

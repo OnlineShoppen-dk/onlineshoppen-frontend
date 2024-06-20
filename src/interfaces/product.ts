@@ -1,4 +1,3 @@
-
 export interface Product {
     id: number,
     guid: string,
@@ -18,6 +17,18 @@ export interface Product {
     categories: Category[],
     images: Image[]
 }
+
+export interface ProductHistory {
+    id: number,
+    name: string,
+    description: string,
+    price: number,
+    updatedAt: string,
+    stock: number,
+    sold: number,
+    createdAt: string,
+}
+
 export interface PostProductRequest {
     guid: string,
     name: string,

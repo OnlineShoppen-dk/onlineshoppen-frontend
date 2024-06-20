@@ -13,6 +13,9 @@ class ApiClient<T> {
     return this.axiosInstance;
   }
 
+  get = (endpoint: string) =>
+    this.axiosInstance.get<T>(endpoint).then((res) => res.data);
+  
   getAll = (endpoint: string) =>
     this.axiosInstance.get<T[]>(endpoint).then((res) => res.data);
 
