@@ -1,21 +1,12 @@
-import { Image, SimpleGrid } from "@chakra-ui/react";
-import { Product, Image as ProductImage } from "../interfaces/product";
-import toasterImage from "../assets/toaster-image.jpg";
+import { SimpleGrid } from "@chakra-ui/react";
+import { Product } from "../interfaces/product";
+import ProductImage from "./ProductImage";
 
 interface Props {
   product: Product;
 }
 
 const ProductImages = ({ product }: Props) => {
-  const placeholderImage: ProductImage = {
-    id: -1,
-    fileName: toasterImage,
-    alt: "toaster-picture",
-    name: "placeholder",
-  };
-  const images =
-    product.images.length > 0 ? product.images : [placeholderImage];
-
   return (
     <SimpleGrid
       spacing={2}
@@ -25,9 +16,10 @@ const ProductImages = ({ product }: Props) => {
         lg: 3,
       }}
     >
-      {images.map((image) => (
+      {/* {images.map((image) => (
         <Image key={image.id} src={image.fileName} />
-      ))}
+      ))} */}
+      <ProductImage product={product} />
     </SimpleGrid>
   );
 };
