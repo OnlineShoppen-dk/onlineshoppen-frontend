@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
-  Checkbox,
   Container,
   FormControl,
   FormLabel,
@@ -20,11 +19,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ErrorResponse } from "../interfaces/auth";
 
-
 const SignInUser = () => {
   const { login: loginApi } = useAuth();
   const { login: loginStore } = useAuthStore();
-  const {getUserDetails} = useAuth();
+  const { getUserDetails } = useAuth();
   const [profile, setProfile] = useState({
     email: "",
     password: "",
@@ -40,11 +38,11 @@ const SignInUser = () => {
       await loginApi.mutateAsync({ email, password });
 
       const response = await getUserDetails.mutateAsync();
-      loginStore(response.data.firstName,email);
+      loginStore(response.data.firstName, email);
       navigate("/");
     } catch (errorRes: unknown) {
-      const error = errorRes as ErrorResponse
-      console.log("errorr here", error)
+      const error = errorRes as ErrorResponse;
+      console.log("errorr here", error);
       toast.error(error.response.data.msg);
       console.error("Login failed:", error);
     }
@@ -64,7 +62,7 @@ const SignInUser = () => {
       py={{ base: "12", md: "24" }}
       px={{ base: "0", sm: "8" }}
     >
-<ToastContainer
+      <ToastContainer
         autoClose={3000}
         closeOnClick={true}
         position="top-center"
@@ -77,7 +75,8 @@ const SignInUser = () => {
               Log in to your account
             </Heading>
             <Text>
-              Har du ikke oprettet en konto? <Link href="/register">Opret her</Link>
+              Har du ikke oprettet en konto?{" "}
+              <Link href="/register">Opret her</Link>
             </Text>
           </Stack>
         </Stack>
@@ -109,8 +108,7 @@ const SignInUser = () => {
                 />
               </FormControl>
               <HStack justify="space-between">
-                <Button variant="text" size="sm">
-                </Button>
+                <Button variant="text" size="sm"></Button>
               </HStack>
               <Stack spacing="6">
                 <Button

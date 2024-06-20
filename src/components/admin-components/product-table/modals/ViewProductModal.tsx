@@ -1,12 +1,12 @@
 interface ProductModalProps {
-    test: string;
+  test: string;
 }
 function ProductModal({ ...props }: ProductModalProps) {
-    return (
-        <div>
-            <h1>Product Modal</h1>
-        </div>
-    );
+  return (
+    <div>
+      <h1>Product Modal {props.test}</h1>
+    </div>
+  );
 }
 
 export default ProductModal;
