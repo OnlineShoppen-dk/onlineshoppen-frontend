@@ -4,10 +4,11 @@ import useAdminProductQueryStore from "../../../store/admin-store/adminProductSt
 
 interface ProductTableProps {
     products: Product[];
+    selectedProduct: Product | undefined;
 }
 
 function ProductTable({ ...props }: ProductTableProps) {
-    const { products } = props;
+    const { products, selectedProduct } = props;
     const { setProductId } = useAdminProductQueryStore();
 
     const handleProductClick = (product: Product) => {
@@ -31,7 +32,10 @@ function ProductTable({ ...props }: ProductTableProps) {
                     {products.map((product) => (
                         <Tr
                             key={product.id + "_product"}
-                            backgroundColor={product.isRemoved ? "red.100" : "white"}
+                            backgroundColor={
+                                selectedProduct?.id === product.id ? "blue.100" :
+                                product.isRemoved ? "red.100" : "white" 
+                            }
                             _hover={{ backgroundColor: "gray.100" }}
                             cursor="pointer"
                             onClick={() => handleProductClick(product)}>

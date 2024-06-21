@@ -4,7 +4,7 @@ import ProductTable from "../../components/admin-components/product-table/Produc
 import AddProductModal from "../../components/admin-components/product-table/modals/AddProductModal";
 import TableContainer from "../../components/admin-components/table-container/TableContainer";
 import useAdminProducts from "../../hooks/admin-hooks/useAdminProducts";
-import { GetDataResponse, GetProductsResponse, GetProductResponse } from '../../interfaces/main-service';
+import { GetDataResponse, GetProductsResponse, GetProductResponse } from "../../interfaces/main-service";
 
 function AdminProducts() {
     const { data, error, isLoading } = useAdminProducts();
@@ -34,7 +34,7 @@ function AdminProductsPage({ ...props }: AdminProductsPageProps) {
             {/* TableContainer */}
             <GridItem colSpan={4} maxHeight={"90vh"} p={4}>
                 <TableContainer data={convertToGetDataResponse(productsResponse)} modal={<AddProductModal />}>
-                    <ProductTable products={productsResponse.products} />
+                    <ProductTable selectedProduct={productResponse?.product} products={productsResponse.products} />
                 </TableContainer>
             </GridItem>
             {/* DetailsContainer */}
