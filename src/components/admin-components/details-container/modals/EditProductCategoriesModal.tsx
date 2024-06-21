@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Modal,
     ModalBody,
@@ -125,61 +126,65 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
                     <ModalCloseButton />
                     <ModalBody>
                         <p>Product Categories</p>
-                        <Table size="sm" variant="simple" borderWidth="1px" borderColor="gray.200" padding={2}>
-                            <TableCaption>Categories</TableCaption>
-                            <Thead>
-                                <Tr>
-                                    <Th>ID</Th>
-                                    <Th>Name</Th>
-                                    <Th>Action</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {productCategories.map((category) => (
-                                    <Tr key={category.id + "_product_category"}>
-                                        <Td>{category.id}</Td>
-                                        <Td>{category.name}</Td>
-                                        <Td>
-                                            <Button
-                                                size={"xs"}
-                                                colorScheme="red"
-                                                onClick={() => handleRemoveCategory(category)}>
-                                                Remove
-                                            </Button>
-                                        </Td>
+                        <Box maxH={"25vh"} overflowY={"auto"}>
+                            <Table size="sm" variant="simple" borderWidth="1px" borderColor="gray.200" padding={2}>
+                                <TableCaption>Categories</TableCaption>
+                                <Thead>
+                                    <Tr>
+                                        <Th>ID</Th>
+                                        <Th>Name</Th>
+                                        <Th>Action</Th>
                                     </Tr>
-                                ))}
-                            </Tbody>
-                        </Table>
-                        <p>All Categories</p>
-                        <Table size="sm" variant="simple" borderWidth="1px" borderColor="gray.200" padding={2}>
-                            <TableCaption>Products</TableCaption>
-                            <Thead>
-                                <Tr>
-                                    <Th>ID</Th>
-                                    <Th>Name</Th>
-                                    <Th>Action</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {categories
-                                    .filter((category) => !productCategories.includes(category))
-                                    .map((category) => (
-                                        <Tr key={category.id + "_category"}>
+                                </Thead>
+                                <Tbody>
+                                    {productCategories.map((category) => (
+                                        <Tr key={category.id + "_product_category"}>
                                             <Td>{category.id}</Td>
                                             <Td>{category.name}</Td>
                                             <Td>
                                                 <Button
                                                     size={"xs"}
-                                                    colorScheme="green"
-                                                    onClick={() => handleAddCategory(category)}>
-                                                    Add
+                                                    colorScheme="red"
+                                                    onClick={() => handleRemoveCategory(category)}>
+                                                    Remove
                                                 </Button>
                                             </Td>
                                         </Tr>
                                     ))}
-                            </Tbody>
-                        </Table>
+                                </Tbody>
+                            </Table>
+                        </Box>
+                        <p>All Categories</p>
+                        <Box maxH={"25vh"} overflowY={"auto"}>
+                            <Table size="sm" variant="simple" borderWidth="1px" borderColor="gray.200" padding={2}>
+                                <TableCaption>Products</TableCaption>
+                                <Thead>
+                                    <Tr>
+                                        <Th>ID</Th>
+                                        <Th>Name</Th>
+                                        <Th>Action</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {categories
+                                        .filter((category) => !productCategories.includes(category))
+                                        .map((category) => (
+                                            <Tr key={category.id + "_category"}>
+                                                <Td>{category.id}</Td>
+                                                <Td>{category.name}</Td>
+                                                <Td>
+                                                    <Button
+                                                        size={"xs"}
+                                                        colorScheme="green"
+                                                        onClick={() => handleAddCategory(category)}>
+                                                        Add
+                                                    </Button>
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                </Tbody>
+                            </Table>
+                        </Box>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="red" mr={3} onClick={onClose}>
