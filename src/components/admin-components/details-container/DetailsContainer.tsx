@@ -83,28 +83,28 @@ function DetailsContainer({ ...props }: DetailsContainerProps) {
                     gridAutoColumns={"5vw auto"}
                     pt={4}>
                     <GridItem area={"priceLabel"} p={2}>
-                        <Text fontSize={"lg"}>Price</Text>
+                        <Text fontSize={"sm"}>Price</Text>
                     </GridItem>
                     <GridItem area={"priceValue"} p={2}>
-                        <Text fontSize={"lg"}>{product.price} DKK</Text>
+                        <Text fontSize={"sm"}>{product.price} DKK</Text>
                     </GridItem>
                     <GridItem area={"stockLabel"} p={2}>
-                        <Text fontSize={"lg"}>Stock</Text>
+                        <Text fontSize={"sm"}>Stock</Text>
                     </GridItem>
                     <GridItem area={"stockValue"} p={2}>
-                        <Text fontSize={"lg"}>{product.stock} pcs.</Text>
+                        <Text fontSize={"sm"}>{product.stock} pcs.</Text>
                     </GridItem>
                     <GridItem area={"createdAtLabel"} p={2}>
-                        <Text fontSize={"lg"}>Created</Text>
+                        <Text fontSize={"sm"}>Created</Text>
                     </GridItem>
                     <GridItem area={"createdAtValue"} p={2}>
-                        <Text fontSize={"lg"}>{formatDateAndTime(product.createdAt)}</Text>
+                        <Text fontSize={"sm"}>{formatDateAndTime(product.createdAt)}</Text>
                     </GridItem>
                     <GridItem area={"updatedAtLabel"} p={2}>
-                        <Text fontSize={"lg"}>Updated</Text>
+                        <Text fontSize={"sm"}>Updated</Text>
                     </GridItem>
                     <GridItem area={"updatedAtValue"} p={2}>
-                        <Text fontSize={"lg"}>{formatDateAndTime(product.updatedAt)}</Text>
+                        <Text fontSize={"sm"}>{formatDateAndTime(product.updatedAt)}</Text>
                     </GridItem>
                 </Grid>
             </GridItem>

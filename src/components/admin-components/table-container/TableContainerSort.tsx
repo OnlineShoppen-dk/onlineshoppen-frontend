@@ -29,7 +29,7 @@ function TableContainerSort({ ...props }: TableContainerSortProps) {
     };
 
     return (
-        <Box display="flex" gap={2}>
+        <Box display="flex" gap={1}>
             {sortFields.map((sort) => (
                 <Box key={sort} gap={4}>
                     <Button size={"xs"} onClick={() => handleSort(sort)}>
@@ -44,8 +44,8 @@ function TableContainerSort({ ...props }: TableContainerSortProps) {
                     </Button>
                 </Box>
             ))}
-            <Flex gap={2} alignItems="center" justifyContent="center">
-                <Text>Show Removed</Text>
+            <Flex gap={2} ml={4} alignItems="center" justifyContent="center">
+                <Text fontSize={"xs"}>Removed</Text>
                 <Switch
                     size="sm"
                     colorScheme="blue"

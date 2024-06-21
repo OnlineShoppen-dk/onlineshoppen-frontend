@@ -167,7 +167,7 @@ function EditProductCategories({ ...props }: EditProductCategoriesProps) {
                                 </Thead>
                                 <Tbody>
                                     {categories
-                                        .filter((category) => !productCategories.includes(category))
+                                        .filter((category) => !productCategories.some((pc) => pc.id === category.id))   
                                         .map((category) => (
                                             <Tr key={category.id + "_category"}>
                                                 <Td>{category.id}</Td>
